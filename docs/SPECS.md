@@ -1,6 +1,6 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v0.5 — en cours de rédaction avec le PO
+> **Statut** : v0.6 — en cours de rédaction avec le PO
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
@@ -37,7 +37,9 @@ type Lieu = {
   - France : format d'URL **à vérifier** (probablement `/previsions-meteo-france/{ville}/{code postal}`).
 - Changement de catégorie Villes ↔ Montagne depuis le détail (ou la liste).
 - Montagne : widget Snow-Forecast (station associée) dans une iframe `sandbox`.
-- Ajout d'un lieu Montagne : doit correspondre à une station Snow-Forecast. Le navigateur ne peut pas interroger snow-forecast.com (pas d'API publique, CORS) ⇒ proposition : **liste de stations embarquée** (`resorts.json` : nom, slug Snow-Forecast, lat/lon), recherche par nom/proximité, ajout refusé si aucune station. Source de la liste et CGU **à valider**.
+- Ajout d'un lieu Montagne : doit correspondre à une station Snow-Forecast. Le navigateur ne peut pas interroger snow-forecast.com (pas d'API publique, CORS) ⇒ proposition : **liste de stations embarquée** (`resorts.json` : nom, slug Snow-Forecast, lat/lon), recherche par nom/proximité, ajout refusé si aucune station.
+  - **Source retenue : sitemap de snow-forecast.com** (option B), via une GitHub Action mensuelle qui régénère `resorts.json` et ouvre un commit. Données minimales : nom + slug (le sitemap ne donne pas les coordonnées ⇒ correspondance par nom ; coordonnées à obtenir autrement, à étudier).
+  - **Préalable bloquant** : lecture des CGU (`/pages/terms`, `/pages/acceptable_use`) et du `robots.txt`. Si interdit ⇒ repli sur liste manuelle (option A).
 
 ## 5. Sources par zone
 Endpoint unique : Open-Meteo `/v1/meteofrance`, modèle demandé explicitement.
@@ -80,7 +82,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 9. Questions ouvertes
 1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
 2. Liste initiale des lieux.
-3. Source de la liste des stations Snow-Forecast (méthode de vérification auto).
+3. CGU Snow-Forecast à lire (préalable à l'option B retenue).
 4. Formats d'URL meteofrance.com (France) et limites des domaines des modèles.
 - Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
 
@@ -92,3 +94,4 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.3 | Passage en app web, découpage des modèles France, Snow-Forecast, F7 |
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
+| 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
