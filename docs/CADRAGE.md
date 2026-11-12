@@ -1,6 +1,6 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v1.0-dev — V1 développée sur la branche `claude/affectionate-ritchie-f5g02p` (non mergée, non déployée)
+> **Statut** : v1.0 — V1 en production sur https://jourdangeoffroy-glitch.github.io/weatherforecast/ (déployée le 2026-11-12, run Actions n°4)
 > **Dernière mise à jour** : 2026-11-12 (V1)
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
@@ -67,7 +67,7 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 - Déploiement : workflow `.github/workflows/deploy.yml` (sur push `main`). À activer : Settings › Pages › Source = GitHub Actions.
 - `security-audit` (profil quick, commit `3b3f9af`, 2026-11-12) : 0 vulnérabilité confirmée, 0 piste à valider, 8 points de durcissement ; serveur de dev Vite non couvert (vite 5.4.11 antérieur à des correctifs du serveur de dev).
 - Durcissements appliqués (2026-11-12) : H1 (hash malformé), H2 (ajout validé + plafond 50, chargement tronqué au lieu d'écraser), H6 (permissions Pages limitées au job deploy). Outillage mis à jour : vite 8.3.5, vitest 5.0.5, @vitejs/plugin-react 6.1.2, jsdom 30.1.3 (versions ≥ 2 semaines, `npm install --before=2026-10-29`) ⇒ `npm audit` : 0 vulnérabilité (avant : 6, dont 2 critiques, toutes en dépendances de dev).
-- 2026-11-12 : branche poussée sur `main` (accord PO). Run Actions n°1 : build OK, job deploy en échec (GitHub Pages probablement non activé : Settings › Pages › Source = GitHub Actions).
+- 2026-11-12 : branche poussée sur `main` (accord PO). Runs n°1–3 : deploy refusé (`main` n'était ni branche par défaut ni autorisée sur l'environnement `github-pages`) ; corrigé par le PO. Run n°4 : déploiement réussi.
 - Non fait : re-audit ciblé (prompt : `docs/audit/PROMPT-REAUDIT.md`).
 
 ## 6. Gouvernance
