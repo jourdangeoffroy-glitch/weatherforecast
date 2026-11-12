@@ -1,65 +1,62 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.2 — brouillon, en cours de cadrage (aucun code produit)
+> **Statut** : v0.3 — cadrage en cours (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
 ## 1. Objectif
-Application desktop permettant un **aperçu rapide** des prévisions météo de plusieurs lieux, avec **transparence sur le modèle météo source** de chaque lieu.
+Application **web** d'aperçu rapide des prévisions météo de plusieurs lieux, avec **transparence sur le modèle météo** utilisé pour chaque lieu. Usage **personnel** (1 utilisateur).
 
 ## 2. Périmètre fonctionnel (MVP)
 | # | Fonction | Statut |
 |---|----------|--------|
-| F1 | Écran d'accueil : météo du jour pour tous les lieux | À spécifier |
-| F2 | Lieux classés en 2 catégories : **Villes** / **Montagne** | À spécifier |
-| F3 | Affichage, pour chaque lieu, du **modèle/source** utilisé | À spécifier |
-| F4 | Clic sur un lieu → page détail (jour + jours suivants, dans la limite du modèle) | À spécifier |
-| F5 | Page détail : lien vers la page source de la prévision | À spécifier |
+| F1 | Accueil : météo du jour pour tous les lieux (T° min/max, icône, pluie, vent) | Validé |
+| F2 | 2 catégories : **Villes** / **Montagne** (montagne = altitude > 1 200 m) | Validé |
+| F3 | Badge du **modèle** utilisé, par lieu et par jour | Validé |
+| F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Validé |
+| F5 | Détail : lien vers la page source | Cible du lien hors France à décider |
+| F6 | Détail Montagne : widget Snow-Forecast | Validé |
+| F7 | Ajout / suppression de lieux (liste initiale fixe) | Validé |
 
-### Hors périmètre (proposé, à valider)
-- Comptes utilisateurs, synchronisation cloud
-- Alertes / notifications push
-- Version mobile ou web
+**Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
 
 ## 3. Sources de données
 Référence : `docs/sources/api_meteo_gratuites.md`.
 
-| Zone | Source | Modèle | Horizon | Statut |
-|------|--------|--------|---------|--------|
-| France | Open-Meteo `/v1/meteofrance` | AROME (1,5 km) / ARPEGE | 168 h annoncé (à vérifier : ARPEGE ≈ 4 j) | Recommandé V1 |
-| Hors France | Open-Meteo `/v1/forecast` | `best_match` ou modèle explicite (ECMWF, ICON, GFS…) | jusqu'à 16 j | Recommandé V1 |
-| Montagne (option) | Snow-Forecast | GFS | 6 j | **Non retenu V1** : flux sur demande, widget = HTML distant |
-| Alertes (option) | Vigilance Météo-France / OpenWeather | — | — | Hors V1 (proposé) |
+| Zone | Source | Modèle | Horizon |
+|------|--------|--------|---------|
+| France | Météo-France via Open-Meteo `/v1/meteofrance` | AROME HD 1,5 km (J0–J+1) puis ARPEGE (≤ J+3) | **4 j max** |
+| France, au-delà de J+3 | Open-Meteo | ECMWF IFS (complément) | jusqu'à ~15 j |
+| Hors France | Open-Meteo `/v1/forecast` | Modèle le plus fin de la zone (table à établir) | ≤ 16 j |
+| Montagne (détail) | Snow-Forecast (widget HTML gratuit) | GFS | 6 j |
 
-**Points d'attention**
-- `best_match` choisit le modèle automatiquement, mais la réponse **n'indique pas le modèle retenu** (à vérifier). Or F3 exige d'afficher le modèle ⇒ demander un **modèle explicite** par lieu.
-- Open-Meteo gratuit = **non commercial**, 10 000 appels/j, licence CC BY 4.0 ⇒ **attribution obligatoire** dans l'UI.
-- Le site meteofrance.com (lien source F5) affiche ~15 j via une prévision consolidée : l'utilisateur verra plus de jours sur la source que dans l'app.
+**Points établis**
+- Le fichier de recommandations annonçait 168 h pour `/v1/meteofrance` : **c'est faux** d'après la doc actuelle d'Open-Meteo (4 j max, AROME HD = 2 j).
+- `best_match` ne garantit pas de savoir quel modèle a été utilisé ⇒ on interroge un **modèle explicite** par zone pour pouvoir l'afficher (F3).
+- Le widget Snow-Forecast existe **par station de ski** ⇒ chaque lieu Montagne doit être associé à une station Snow-Forecast. Le lien vers snow-forecast.com doit rester affiché (condition d'utilisation).
+- Open-Meteo : gratuit en non commercial, 10 000 appels/j, CC BY 4.0 ⇒ attribution affichée.
 
 ## 4. Contraintes techniques
-- **Stack** : Electron
-- **Design system** : DS Geoffroy (https://claude.ai/artifact/WNQ359bdKwMqxC5fNM1gb7)
+- **Stack** : application web (Electron abandonné). Proposition : TypeScript + React + Vite, site statique (cf. SPECS §1).
+- **Design system** : DS Geoffroy / Névé (https://claude.ai/artifact/WNQ359bdKwMqxC5fNM1gb7). Pensé pour Electron : partie fenêtre à adapter (cf. SPECS §7).
 - **Repo** : `jourdangeoffroy-glitch/weatherforecast`
-- **Sécurité** : contrôle régulier via la skill `security-audit` (cadence à fixer, cf. §7)
-- **Hébergement** : une app Electron n'est pas « hébergée » comme un site ; elle est **distribuée** (binaires .dmg/.exe/.AppImage, ex. GitHub Releases). Seul un éventuel backend/proxy API serait hébergé.
+- **Sécurité** : skill `security-audit` avant chaque merge sur `main` et chaque mise en production.
+- **Hébergement** : site statique (GitHub Pages / Cloudflare Pages / Netlify), sans backend car Open-Meteo ne demande pas de clé.
 
-## 5. Risques identifiés
+## 5. Risques
 | Risque | Impact | Mitigation |
 |--------|--------|-----------|
-| Clé API embarquée dans le binaire Electron = extractible | Fuite de clé, quota épuisé | Open-Meteo sans clé ⇒ risque écarté en V1 |
-| Licence/CGU des sources (usage commercial ?) | Blocage juridique | Valider l'usage (perso vs commercial) |
-| Horizon de prévision court côté Météo-France | Détail limité à 2–4 j | Assumer et l'afficher, ou compléter par un autre modèle |
-| Surface d'attaque Electron (nodeIntegration, contextIsolation) | RCE | Checklist sécurité Electron + security-audit |
+| Horizon Météo-France court (4 j) | Détail France limité | Complément ECMWF + badge par jour |
+| Widget Snow-Forecast = script/HTML tiers | Injection de contenu tiers | Iframe isolée (`sandbox`), CSP restreinte |
+| Lieu Montagne sans station Snow-Forecast | Widget absent | Afficher la météo Open-Meteo seule |
+| Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Seuil modifiable à la main par lieu (à valider) |
+| Lieux stockés en `localStorage` | Perte si cache vidé / autre appareil | Export/import JSON (à valider) |
 
-## 6. Questions ouvertes
-Voir `SPECS.md` §8.
-
-## 7. Gouvernance
+## 6. Gouvernance
 - Mise à jour obligatoire de `CADRAGE.md` + `SPECS.md` à chaque changement.
-- `security-audit` : cadence proposée = avant chaque merge sur `main` + avant chaque release (à valider).
+- `security-audit` avant chaque merge et chaque mise en production.
 
-## 8. Sources
-- Météo-France API : https://portail-api.meteofrance.fr
-- Recommandations sources : `docs/sources/api_meteo_gratuites.md`
-- Open-Meteo (modèles Météo-France, sans clé) : https://open-meteo.com/en/docs/meteofrance-api
-- Sécurité Electron : https://www.electronjs.org/docs/latest/tutorial/security
+## 7. Sources
+- Recommandations : `docs/sources/api_meteo_gratuites.md`
+- Open-Meteo, modèles Météo-France : https://open-meteo.com/en/docs/meteofrance-api
+- Widget Snow-Forecast : https://www.snow-forecast.com/pages/configure_feed1 — https://snow-forecast.com/pages/feed
