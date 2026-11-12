@@ -1,7 +1,7 @@
 # Spécifications — WeatherForecast
 
 > **Statut** : v1.0 — en production : https://jourdangeoffroy-glitch.github.io/weatherforecast/
-> **Dernière mise à jour** : 2026-11-12 (V1)
+> **Dernière mise à jour** : 2026-11-12 (v1.1 en dev, non déployée)
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
 ## 1. Architecture (implémentée)
@@ -30,6 +30,10 @@ type Lieu = {
 - Sections **Villes** / **Montagne**.
 - Carte : nom, icône (Material Symbols, jamais d'emoji), T° min/max, cumul pluie (mm), vent (km/h), badge modèle.
 - Unités : °C, km/h, mm. Langue : français.
+- Nom affiché (en-tête + `<title>`) : **Dashboard météo de Geoffroy**.
+- Icône météo : légende au survol (tooltip CSS `data-tip`, libellé WMO de `weathercode.ts`) ; `aria-label` conservé pour les lecteurs d'écran.
+- Thème : bouton soleil/lune dans l'en-tête ; `html[data-theme]` = `light`|`dark`, mémorisé dans `localStorage` (`wf.theme.v1`), défaut = `prefers-color-scheme`.
+- Échec de chargement : timeout 15 s ; réponse sans aucune température exploitable ⇒ « Aucune prévision disponible pour ce lieu » (au lieu de « Chargement… » infini) ; ce résultat vide n'est pas mis en cache.
 
 ## 4. Détail (F4, F5, F6)
 - J0 : pas **horaire**.
@@ -100,6 +104,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 10. Historique
 | Date | Version | Changement |
 |------|---------|-----------|
+| 2026-11-12 | 1.1-dev | Nom « Dashboard météo de Geoffroy », bascule clair/sombre, légende icônes au survol, correctif « Chargement… » infini (Winnipeg) |
 | 2026-11-12 | 0.1 | Création squelette cadrage + specs |
 | 2026-11-12 | 0.2 | Intégration des recommandations de sources |
 | 2026-11-12 | 0.3 | Passage en app web, découpage des modèles France, Snow-Forecast, F7 |

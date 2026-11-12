@@ -1,7 +1,7 @@
 # Document de cadrage — WeatherForecast
 
 > **Statut** : v1.0 — V1 en production sur https://jourdangeoffroy-glitch.github.io/weatherforecast/ (déployée le 2026-11-12, run Actions n°4)
-> **Dernière mise à jour** : 2026-11-12 (V1)
+> **Dernière mise à jour** : 2026-11-12 (v1.1 en dev : retours PO, non déployée)
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
 ## 1. Objectif
@@ -18,6 +18,8 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | F6 | Détail Montagne : widget Snow-Forecast. Stations **françaises uniquement**, listées dans `data/stations.json`, enrichie à la main au fil des ajouts | Développé |
 | F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes, Arc 1800 | Développé |
 | F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Développé |
+| F9 | Bascule mode clair / sombre (bouton en-tête, choix mémorisé, défaut = réglage OS) | Développé (v1.1, non déployé) |
+| F10 | Légende au survol des icônes météo (ex. « Pluie », « Couvert », « Ensoleillé ») | Développé (v1.1, non déployé) |
 
 **Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
 
@@ -68,6 +70,7 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 - `security-audit` (profil quick, commit `3b3f9af`, 2026-11-12) : 0 vulnérabilité confirmée, 0 piste à valider, 8 points de durcissement ; serveur de dev Vite non couvert (vite 5.4.11 antérieur à des correctifs du serveur de dev).
 - Durcissements appliqués (2026-11-12) : H1 (hash malformé), H2 (ajout validé + plafond 50, chargement tronqué au lieu d'écraser), H6 (permissions Pages limitées au job deploy). Outillage mis à jour : vite 8.3.5, vitest 5.0.5, @vitejs/plugin-react 6.1.2, jsdom 30.1.3 (versions ≥ 2 semaines, `npm install --before=2026-10-29`) ⇒ `npm audit` : 0 vulnérabilité (avant : 6, dont 2 critiques, toutes en dépendances de dev).
 - 2026-11-12 : branche poussée sur `main` (accord PO). Runs n°1–3 : deploy refusé (`main` n'était ni branche par défaut ni autorisée sur l'environnement `github-pages`) ; corrigé par le PO. Run n°4 : déploiement réussi.
+- 2026-11-12 (v1.1, branche `claude/funny-gauss-ogn90z`) : nom → « Dashboard météo de Geoffroy » ; F9, F10 ; correctif « Chargement… » infini (prévision vide → message d'erreur, timeout 15 s, prévision vide jamais mise en cache). Cause exacte Winnipeg **non confirmée** (API Open-Meteo en quota dépassé depuis l'environnement de dev). 17 tests OK, build OK.
 - Non fait : re-audit ciblé (prompt : `docs/audit/PROMPT-REAUDIT.md`).
 
 ## 6. Gouvernance

@@ -6,6 +6,7 @@ import { Accueil } from './components/Accueil';
 import { Detail } from './components/Detail';
 import { Ajout } from './components/Ajout';
 import { Icon } from './components/Icon';
+import { basculerTheme, themeCourant, type Theme } from './lib/theme';
 
 export type Etat = { prevision?: Prevision; erreur?: string };
 
@@ -25,6 +26,7 @@ export default function App() {
   const [id, setId] = useState(routeId);
   const [ajout, setAjout] = useState(false);
   const [info, setInfo] = useState('');
+  const [theme, setTheme] = useState<Theme>(themeCourant);
   const fichier = useRef<HTMLInputElement>(null);
 
   useEffect(() => sauver(lieux), [lieux]);
@@ -80,8 +82,9 @@ export default function App() {
   return (
     <>
       <header className="app-header">
-        <a href="#/" className="marque">Météo des lieux</a>
+        <a href="#/" className="marque">Dashboard météo de Geoffroy</a>
         <div className="actions">
+          <button type="button" className="btn btn-icon" aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'} title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'} onClick={() => setTheme(basculerTheme(theme))}><Icon name={theme === 'dark' ? 'light' : 'dark'} /></button>
           <button type="button" className="btn btn-icon" aria-label="Actualiser" title="Actualiser" onClick={() => { setEtats({}); charge(lieux, true); }}><Icon name="refresh" /></button>
           <button type="button" className="btn btn-icon" aria-label="Exporter les lieux (JSON)" title="Exporter" onClick={telecharger}><Icon name="download" /></button>
           <button type="button" className="btn btn-icon" aria-label="Importer des lieux (JSON)" title="Importer" onClick={() => fichier.current?.click()}><Icon name="upload" /></button>

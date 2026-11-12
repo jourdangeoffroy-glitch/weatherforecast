@@ -6,6 +6,7 @@ export const JOURS_MAX = 4; // J0 → J+3 (horizon ARPEGE sur /v1/meteofrance)
 const VARS = ['temperature_2m', 'precipitation', 'wind_speed_10m', 'wind_gusts_10m', 'weather_code'] as const;
 type Var = (typeof VARS)[number];
 const TTL_MS = 30 * 60 * 1000;
+const TIMEOUT_MS = 15_000;
 const CACHE_PREFIX = 'wf.cache.v1.';
 
 export function forecastUrl(l: Pick<Lieu, 'lat' | 'lon' | 'altitude'>): string {
@@ -102,7 +103,7 @@ function lireCache(key: string): Prevision | null {
     const raw = localStorage.getItem(CACHE_PREFIX + key);
     if (!raw) return null;
     const p = JSON.parse(raw) as Prevision;
-    return Date.now() - p.recupereLe < TTL_MS ? p : null;
+    return Date.now() - p.recupereLe < TTL_MS && p.jours?.length ? p : null; // cache vide = ignoré
   } catch {
     return null;
   }
@@ -122,10 +123,14 @@ export async function getForecast(l: Lieu, opts: { force?: boolean; signal?: Abo
     const c = lireCache(url);
     if (c) return c;
   }
-  const res = await fetch(url, { signal: opts.signal, referrerPolicy: 'no-referrer' });
+  const signal = opts.signal ? AbortSignal.any([opts.signal, AbortSignal.timeout(TIMEOUT_MS)]) : AbortSignal.timeout(TIMEOUT_MS);
+  const res = await fetch(url, { signal, referrerPolicy: 'no-referrer' }).catch((e: Error) => {
+    throw new Error(e.name === 'TimeoutError' ? 'Open-Meteo : délai dépassé' : 'Open-Meteo : réseau indisponible');
+  });
   const body = (await res.json().catch(() => ({}))) as Brut & { reason?: string };
   if (!res.ok) throw new Error(body.reason ? `Open-Meteo : ${body.reason}` : `Open-Meteo : erreur ${res.status}`);
   const p: Prevision = { jours: grouperParJour(parseHourly(body)), recupereLe: Date.now(), decalageS: num(body.utc_offset_seconds) ?? 0 };
+  if (!p.jours.length) throw new Error('Aucune prévision disponible pour ce lieu (modèles Météo-France sans donnée).');
   ecrireCache(url, p);
   return p;
 }
