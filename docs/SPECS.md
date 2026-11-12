@@ -80,10 +80,8 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 - `security-audit` avant chaque merge et chaque mise en production.
 
 ## 9. Questions ouvertes
-1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
-2. Liste initiale des lieux.
-- Tranché : stations françaises uniquement, liste manuelle progressive (`data/stations.json`).
-4. Formats d'URL meteofrance.com (France) et limites des domaines des modèles.
+1. À vérifier en dev : format d'URL meteofrance.com pour les villes françaises ; limites des domaines AROME / ARPEGE Europe.
+- Tranché : V1 100 % Météo-France ; liste initiale de 7 lieux (§5 bis) ; stations françaises uniquement, liste manuelle (`data/stations.json`).
 - Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
 
 ## 10. Historique
