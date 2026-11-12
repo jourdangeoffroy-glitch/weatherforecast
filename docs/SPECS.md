@@ -1,7 +1,7 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v1.0 — en production : https://jourdangeoffroy-glitch.github.io/weatherforecast/
-> **Dernière mise à jour** : 2026-11-12 (v1.1 en dev, non déployée)
+> **Statut** : v1.1 — en production : https://jourdangeoffroy-glitch.github.io/weatherforecast/
+> **Dernière mise à jour** : 2026-11-12 (v1.1 en production)
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
 ## 1. Architecture (implémentée)
@@ -92,7 +92,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 - Données importées et `localStorage` traitées comme non fiables : validation stricte ; slug Snow-Forecast accepté seulement s'il figure dans `data/stations.json`.
 - Requêtes `fetch` en `referrerPolicy: no-referrer`. Aucun secret, aucun backend.
 - Liens externes : `rel="noopener noreferrer"`.
-- `security-audit` avant chaque merge et chaque mise en production.
+- `security-audit` uniquement sur demande explicite du PO.
 
 ## 9. Questions ouvertes
 1. Valider en navigateur la réponse multi-modèles d'Open-Meteo (quota épuisé côté dev).
@@ -104,6 +104,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 10. Historique
 | Date | Version | Changement |
 |------|---------|-----------|
+| 2026-11-12 | 1.1 | Mise en production sur `main` sans security-audit (décision PO) ; audit désormais sur demande explicite uniquement |
 | 2026-11-12 | 1.1-dev | Nom « Dashboard météo de Geoffroy », bascule clair/sombre, légende icônes au survol, correctif « Chargement… » infini (Winnipeg) |
 | 2026-11-12 | 0.1 | Création squelette cadrage + specs |
 | 2026-11-12 | 0.2 | Intégration des recommandations de sources |

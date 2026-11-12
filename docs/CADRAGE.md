@@ -1,7 +1,7 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v1.0 — V1 en production sur https://jourdangeoffroy-glitch.github.io/weatherforecast/ (déployée le 2026-11-12, run Actions n°4)
-> **Dernière mise à jour** : 2026-11-12 (v1.1 en dev : retours PO, non déployée)
+> **Statut** : v1.1 — en production sur https://jourdangeoffroy-glitch.github.io/weatherforecast/ (v1.0 déployée le 2026-11-12 run n°4 ; v1.1 poussée sur `main` le 2026-11-12)
+> **Dernière mise à jour** : 2026-11-12 (v1.1 en production)
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
 ## 1. Objectif
@@ -18,8 +18,8 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | F6 | Détail Montagne : widget Snow-Forecast. Stations **françaises uniquement**, listées dans `data/stations.json`, enrichie à la main au fil des ajouts | Développé |
 | F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes, Arc 1800 | Développé |
 | F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Développé |
-| F9 | Bascule mode clair / sombre (bouton en-tête, choix mémorisé, défaut = réglage OS) | Développé (v1.1, non déployé) |
-| F10 | Légende au survol des icônes météo (ex. « Pluie », « Couvert », « Ensoleillé ») | Développé (v1.1, non déployé) |
+| F9 | Bascule mode clair / sombre (bouton en-tête, choix mémorisé, défaut = réglage OS) | Développé (v1.1) |
+| F10 | Légende au survol des icônes météo (ex. « Pluie », « Couvert », « Ensoleillé ») | Développé (v1.1) |
 
 **Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
 
@@ -45,7 +45,7 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 - **Stack** : application web (Electron abandonné). Proposition : TypeScript + React + Vite, site statique (cf. SPECS §1).
 - **Design system** : DS Geoffroy / Névé v0.3 (https://claude.ai/artifact/WNQ359bdKwMqxC5fNM1gb7), adapté au web responsive le 2026-11-12.
 - **Repo** : `jourdangeoffroy-glitch/weatherforecast` (**public**)
-- **Sécurité** : skill `security-audit` avant chaque merge sur `main` et chaque mise en production.
+- **Sécurité** : skill `security-audit` uniquement sur demande explicite du PO (règle du 2026-11-12).
 - **Hébergement** : en ligne, URL publique. Proposé : **GitHub Pages** (gratuit car repo public), déploiement auto via GitHub Actions → `https://jourdangeoffroy-glitch.github.io/weatherforecast/`. Pas de backend (Open-Meteo sans clé).
 
 ## 5. Risques
@@ -71,11 +71,12 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 - Durcissements appliqués (2026-11-12) : H1 (hash malformé), H2 (ajout validé + plafond 50, chargement tronqué au lieu d'écraser), H6 (permissions Pages limitées au job deploy). Outillage mis à jour : vite 8.3.5, vitest 5.0.5, @vitejs/plugin-react 6.1.2, jsdom 30.1.3 (versions ≥ 2 semaines, `npm install --before=2026-10-29`) ⇒ `npm audit` : 0 vulnérabilité (avant : 6, dont 2 critiques, toutes en dépendances de dev).
 - 2026-11-12 : branche poussée sur `main` (accord PO). Runs n°1–3 : deploy refusé (`main` n'était ni branche par défaut ni autorisée sur l'environnement `github-pages`) ; corrigé par le PO. Run n°4 : déploiement réussi.
 - 2026-11-12 (v1.1, branche `claude/funny-gauss-ogn90z`) : nom → « Dashboard météo de Geoffroy » ; F9, F10 ; correctif « Chargement… » infini (prévision vide → message d'erreur, timeout 15 s, prévision vide jamais mise en cache). Cause exacte Winnipeg **non confirmée** (API Open-Meteo en quota dépassé depuis l'environnement de dev). 17 tests OK, build OK.
+- 2026-11-12 : v1.1 fusionnée et poussée sur `main` **sans security-audit** (décision PO). Règle changée : l'audit n'est lancé que sur demande explicite du PO.
 - Non fait : re-audit ciblé (prompt : `docs/audit/PROMPT-REAUDIT.md`).
 
 ## 6. Gouvernance
 - Mise à jour obligatoire de `CADRAGE.md` + `SPECS.md` à chaque changement.
-- `security-audit` avant chaque merge et chaque mise en production.
+- `security-audit` uniquement sur demande explicite du PO.
 
 ## 7. Sources
 - Recommandations : `docs/sources/api_meteo_gratuites.md`
