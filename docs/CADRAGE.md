@@ -1,6 +1,6 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.4 — cadrage en cours (aucun code produit)
+> **Statut** : v0.5 — cadrage quasi finalisé (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
@@ -14,21 +14,24 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | F2 | 2 catégories : **Villes** / **Montagne** — attribution auto (altitude > 1 200 m), modifiable manuellement | Validé |
 | F3 | Badge du **modèle** utilisé, par lieu et par jour | Validé |
 | F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Validé |
-| F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (France et hors France) | Validé — existence des pages monde à vérifier |
-| F6 | Détail Montagne : widget Snow-Forecast | Validé |
-| F7 | Ajout / suppression de lieux (liste initiale fixe) | Validé |
+| F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (ex. monde : `meteofrance.com/meteo-monde/toronto/6167865`) | Validé |
+| F6 | Détail Montagne : widget Snow-Forecast ; à l'ajout, vérification auto que le lieu est une station Snow-Forecast | Validé — méthode technique à valider |
+| F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes | Validé |
+| F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Validé |
 
 **Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
 
 ## 3. Sources de données
-Référence : `docs/sources/api_meteo_gratuites.md`.
+**V1 : uniquement les modèles Météo-France**, via Open-Meteo `/v1/meteofrance`, pour tous les lieux.
 
-| Zone | Source | Modèle | Horizon |
-|------|--------|--------|---------|
-| France | Météo-France via Open-Meteo `/v1/meteofrance` | AROME HD 1,5 km (J0–J+1) puis ARPEGE (≤ J+3) | **4 j max** |
-| France, au-delà de J+3 | Open-Meteo | ECMWF IFS (complément) | jusqu'à ~15 j |
-| Hors France | Open-Meteo `/v1/forecast` | Modèle le plus fin de la zone (table à établir) | ≤ 16 j |
-| Montagne (détail) | Snow-Forecast (widget HTML gratuit) | GFS | 6 j |
+| Zone | Modèle | Résolution | Horizon |
+|------|--------|-----------|---------|
+| France et voisins | AROME France HD | 1,5 km | 2 j |
+| Europe (ex. Finlande) | ARPEGE Europe | ~11 km | 4 j |
+| Reste du monde (ex. Winnipeg) | ARPEGE World | ~25 km | 4 j |
+| Montagne (détail) | Snow-Forecast (widget) — GFS | — | 6 j |
+
+⇒ **Horizon de l'app : 4 jours (J0 → J+3) pour tous les lieux.** Le complément ECMWF et les modèles nationaux sont abandonnés en V1.
 
 **Points établis**
 - Le fichier de recommandations annonçait 168 h pour `/v1/meteofrance` : **c'est faux** d'après la doc actuelle d'Open-Meteo (4 j max, AROME HD = 2 j).
@@ -46,11 +49,13 @@ Référence : `docs/sources/api_meteo_gratuites.md`.
 ## 5. Risques
 | Risque | Impact | Mitigation |
 |--------|--------|-----------|
-| Horizon Météo-France court (4 j) | Détail France limité | Complément ECMWF + badge par jour |
+| Horizon 4 j alors que meteofrance.com affiche 15 j | L'utilisateur voit plus de jours sur le lien | Assumé en V1, mentionné dans l'UI |
 | Widget Snow-Forecast = script/HTML tiers | Injection de contenu tiers | Iframe isolée (`sandbox`), CSP restreinte |
 | Lieu Montagne sans station Snow-Forecast | Widget absent | Afficher la météo Open-Meteo seule |
 | Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Catégorie modifiable à la main par lieu |
-| Lien meteofrance.com hors France alors que les données viennent d'un autre modèle | Chiffres différents entre l'app et la page liée | Libellé explicite « Voir aussi sur Météo-France » |
+| Chiffres app ≠ meteofrance.com (le site publie une prévision retravaillée, pas le modèle brut) | Écarts de quelques °C possibles | Libellé « Voir sur Météo-France » |
+| Vérification Snow-Forecast depuis le navigateur bloquée (CORS, pas d'API publique) | Ajout montagne non vérifiable côté client | Liste de stations embarquée (cf. SPECS §4) |
+| Le Grand-Bornand (village ≈ 950 m) classé « Ville » par la règle 1 200 m | Mauvaise catégorie | Forcé « Montagne » dans la liste initiale |
 | Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | À trancher (cf. SPECS §9) |
 
 ## 6. Gouvernance

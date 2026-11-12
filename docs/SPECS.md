@@ -1,6 +1,6 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v0.4 — en cours de rédaction avec le PO
+> **Statut** : v0.5 — en cours de rédaction avec le PO
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
@@ -9,13 +9,14 @@
 - Appels Open-Meteo directement depuis le navigateur (sans clé).
 - Couche `provider` : `getForecast(lieu)`, `modelForDay(lieu, jour)`, `sourceUrl(lieu)`, `maxDays`.
 - Persistance des lieux : `localStorage` (usage mono-utilisateur).
-- Ajout de lieu : API de géocodage Open-Meteo (renvoie pays + altitude ⇒ provider et catégorie déduits automatiquement).
+- Ajout de lieu : API de géocodage Open-Meteo (renvoie pays, altitude et **identifiant GeoNames** ⇒ catégorie et lien meteofrance.com déduits automatiquement).
 
 ## 2. Modèle de données
 ```ts
 type Lieu = {
   id: string; nom: string; pays: string;          // ISO-3166 alpha-2
   lat: number; lon: number; altitude: number;
+  geonamesId: number;                              // sert à l'URL meteofrance.com (Toronto = 6167865)
   categorie: 'ville' | 'montagne';                 // auto : altitude > 1200 m à l'ajout
   categorieManuelle?: boolean;                     // true si l'utilisateur l'a modifiée
   snowForecastResort?: string;                     // id station, si montagne
@@ -30,20 +31,36 @@ type Lieu = {
 ## 4. Détail (F4, F5, F6)
 - J0 : pas **horaire**.
 - J+1 → horizon : **demi-journée** (matin / après-midi).
-- Badge modèle **par jour** (France : AROME → ARPEGE → ECMWF).
-- Lien source : page de la ville sur **meteofrance.com**, pour tous les lieux. Hors France, libellé « Voir aussi sur Météo-France » (les données affichées viennent d'un autre modèle). Format d'URL des pages monde **à vérifier** ; repli : page de recherche meteofrance.com.
+- Badge modèle **par jour** (AROME HD → ARPEGE ; hors Europe : ARPEGE World). Horizon : J0 → J+3.
+- Lien source : meteofrance.com.
+  - Hors France : `https://meteofrance.com/meteo-monde/{slug}/{geonamesId}` (format confirmé par l'exemple Toronto). Le rôle exact du slug reste à vérifier.
+  - France : format d'URL **à vérifier** (probablement `/previsions-meteo-france/{ville}/{code postal}`).
 - Changement de catégorie Villes ↔ Montagne depuis le détail (ou la liste).
 - Montagne : widget Snow-Forecast (station associée) dans une iframe `sandbox`.
+- Ajout d'un lieu Montagne : doit correspondre à une station Snow-Forecast. Le navigateur ne peut pas interroger snow-forecast.com (pas d'API publique, CORS) ⇒ proposition : **liste de stations embarquée** (`resorts.json` : nom, slug Snow-Forecast, lat/lon), recherche par nom/proximité, ajout refusé si aucune station. Source de la liste et CGU **à valider**.
 
 ## 5. Sources par zone
-| Zone | Endpoint | Modèle | Horizon |
-|------|----------|--------|---------|
-| France J0–J+1 | `/v1/meteofrance` | `arome_france_hd` (1,5 km) | 2 j |
-| France J+2–J+3 | `/v1/meteofrance` | `arpege_europe` (0,1°) | 4 j |
-| France J+4 et au-delà | `/v1/forecast` | `ecmwf_ifs` | ~15 j |
-| Hors France | `/v1/forecast` | modèle le plus fin par zone — **table à établir** | ≤ 16 j |
+Endpoint unique : Open-Meteo `/v1/meteofrance`, modèle demandé explicitement.
+
+| Zone | Modèle (`models=`) | Horizon |
+|------|--------------------|---------|
+| Domaine AROME (France + voisins) | `arome_france_hd` J0–J+1, puis `arpege_europe` | 4 j |
+| Domaine ARPEGE Europe (ex. Finlande) | `arpege_europe` | 4 j |
+| Ailleurs (ex. Winnipeg) | `arpege_world` | 4 j |
+
+Limites des domaines AROME / ARPEGE Europe : **à vérifier** pour l'attribution automatique.
 
 Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (ex. 30 min) pour rester sous 10 000 appels/j.
+
+## 5 bis. Liste initiale
+| Lieu | Pays | Catégorie | Modèle attendu | Remarque |
+|------|------|-----------|----------------|----------|
+| Lyon | FR | Ville | AROME HD → ARPEGE | |
+| Winnipeg | CA | Ville | ARPEGE World | |
+| Rovaniemi | FI | Ville | ARPEGE Europe | |
+| Lappeenranta | FI | Ville | ARPEGE Europe | |
+| Le Grand-Bornand | FR | Montagne (forcée) | AROME HD → ARPEGE | village ≈ 950 m < 1 200 m |
+| Les Deux Alpes | FR | Montagne | AROME HD → ARPEGE | ≈ 1 650 m |
 
 ## 6. Non-fonctionnel
 - Responsive **mobile d'abord** : 1 colonne < 600 px, 2 colonnes 600–1023 px, 3–4 colonnes ≥ 1 024 px (tokens Névé v0.3).
@@ -63,8 +80,9 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 9. Questions ouvertes
 1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
 2. Liste initiale des lieux.
-3. Synchronisation des lieux entre appareils (localStorage = une liste par navigateur).
-4. Association lieu Montagne → station Snow-Forecast.
+3. Source de la liste des stations Snow-Forecast (méthode de vérification auto).
+4. Formats d'URL meteofrance.com (France) et limites des domaines des modèles.
+- Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
 
 ## 10. Historique
 | Date | Version | Changement |
@@ -73,3 +91,4 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.2 | Intégration des recommandations de sources |
 | 2026-11-12 | 0.3 | Passage en app web, découpage des modèles France, Snow-Forecast, F7 |
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
+| 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
