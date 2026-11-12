@@ -1,0 +1,5 @@
+routeId(#/lieu/gn-1) -> "gn-1"
+routeId(#/lieu/%E0) throws URIError: URI malformed
+routeId(#/lieu/javascript%3Aalert(1)) -> "javascript:alert(1)"
+!etats['__proto__'] = false  (forecast skipped for id __proto__)
+computed __proto__ spread own prop: true, proto polluted: false

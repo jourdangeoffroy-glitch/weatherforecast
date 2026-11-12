@@ -1,0 +1,35 @@
+{
+ "run_id": "weatherforecast-run-1",
+ "repo": "jourdangeoffroy-glitch/weatherforecast",
+ "target": "<racine du repo>",
+ "source_ref": {
+  "commit": "3b3f9af5731c001ec412101736fef42556b4f187",
+  "dirty": false
+ },
+ "profile": "quick",
+ "scope_paths": [
+  "src/",
+  "index.html",
+  "vite.config.ts",
+  ".github/workflows/deploy.yml",
+  "data/stations.json",
+  "package.json",
+  "package-lock.json"
+ ],
+ "budget": 12,
+ "execution_policy": "sandboxed-source-and-local-only",
+ "sandbox": "sbx.sh (scratchpad de la session run-1, non conservé) : unshare -r -m -n (pas de réseau externe), / et cible remontés en lecture seule, seul le scratch de l'agent inscriptible, env -i allowlisté (PATH, HOME, TMPDIR, NODE_OPTIONS), prlimit --as=32GiB --nproc=128 --fsize=20MB --cpu=60s, timeout 90 s",
+ "selected_companions": [
+  "CLIENT-SIDE.md",
+  "SUPPLY-CHAIN-AND-RELEASE.md"
+ ],
+ "prior_runs": [],
+ "shared_file_owner": "parent",
+ "run_status": "complete",
+ "agents_spent": 7,
+ "final_critic": {
+  "stop": false,
+  "missing_units_accepted": 1,
+  "handled_as": "deferred (quick_profile_final_critic)"
+ }
+}

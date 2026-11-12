@@ -1,0 +1,922 @@
+[
+ {
+  "coverage_id": ".github%2Fworkflows%2Fdeploy.yml%23on::.github%2Fworkflows%2Fdeploy.yml%23permissions::profile%2Fquick%2Fall-in-scope-subsystems::SUPPLY-CHAIN-AND-RELEASE.md%23Untrusted%20code%20in%20a%20privileged%20workflow",
+  "canonical_refs": {
+   "surface": ".github/workflows/deploy.yml#on",
+   "boundary": ".github/workflows/deploy.yml#permissions",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "SUPPLY-CHAIN-AND-RELEASE.md#Untrusted code in a privileged workflow"
+  },
+  "surface": "Workflow de déploiement",
+  "boundary": "Déclencheurs et permissions du jeton",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Code non fiable en workflow privilégié",
+  "starting_paths": [
+   ".github/workflows/deploy.yml",
+   "package.json"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "SUPPLY-CHAIN-AND-RELEASE.md#Core discipline",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Untrusted code in a privileged workflow",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Automation identity overreach",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Build-to-promotion substitution",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Universal moves",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Mutable and unbound build inputs",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency source and namespace confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Build-context inclusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-supply",
+  "reviewed_paths": [
+   ".github/workflows/deploy.yml",
+   "package.json"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     ".github/workflows/deploy.yml"
+    ],
+    "invariant": "No lower-trust event runs contributor code with pages/id-token permissions",
+    "method": "source",
+    "result": "Triggers only push main + workflow_dispatch; no PR triggers, no ref override, no secrets.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     ".github/workflows/deploy.yml",
+     "package.json"
+    ],
+    "invariant": "Job permissions minimal; no untrusted input selects resource",
+    "method": "source",
+    "result": "Workflow-level pages:write/id-token:write also given to build job; no untrusted input interpolation. Hardening.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     ".github/workflows/deploy.yml"
+    ],
+    "invariant": "Built artifact is the one promoted",
+    "method": "source",
+    "result": "Same-run upload-pages-artifact/deploy-pages; concurrency cancel-in-progress.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-supply",
+  "_hardening": [
+   "deploy.yml:6-9 permissions pages/id-token au niveau workflow → les déplacer au niveau du job deploy",
+   "actions épinglées par tag majeur → épingler par SHA",
+   "protéger main et restreindre l'environnement github-pages (réglages hors source)",
+   "node-version 22 flottant"
+  ]
+ },
+ {
+  "coverage_id": "index.html%23document::vite.config.ts%23csp::profile%2Fquick%2Fall-in-scope-subsystems::CLIENT-SIDE.md%23Clickjacking",
+  "canonical_refs": {
+   "surface": "index.html#document",
+   "boundary": "vite.config.ts#csp",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "CLIENT-SIDE.md#Clickjacking"
+  },
+  "surface": "Document HTML publié",
+  "boundary": "CSP meta injectée au build",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "UI redress / politique CSP",
+  "starting_paths": [
+   "index.html",
+   "vite.config.ts",
+   "src/App.tsx"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#Clickjacking",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#DOM-based XSS",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Window and opener state disclosure",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Client-side navigation confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "index.html",
+   "src/App.tsx",
+   "vite.config.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "index.html",
+     "vite.config.ts"
+    ],
+    "invariant": "Built document carries intended CSP early in head",
+    "method": "local",
+    "result": "Sandboxed vite build injects CSP meta right after charset.",
+    "artifact": "agents/hunter-client/artifacts/check2.txt"
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/App.tsx",
+     "vite.config.ts"
+    ],
+    "invariant": "No sensitive state-changing action completes in a hostile frame",
+    "method": "source",
+    "result": "App frameable (no frame-ancestors) but no account/secret/privileged action; framed storage is partitioned by top-level site. Hardening only.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ },
+ {
+  "coverage_id": "package-lock.json::.github%2Fworkflows%2Fdeploy.yml%23npm%20ci::profile%2Fquick%2Fall-in-scope-subsystems::SUPPLY-CHAIN-AND-RELEASE.md%23Mutable%20and%20unbound%20build%20inputs",
+  "canonical_refs": {
+   "surface": "package-lock.json",
+   "boundary": ".github/workflows/deploy.yml#npm ci",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "SUPPLY-CHAIN-AND-RELEASE.md#Mutable and unbound build inputs"
+  },
+  "surface": "Dépendances npm et actions",
+  "boundary": "Lockfile + épinglage des actions",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Entrées de build mutables",
+  "starting_paths": [
+   "package.json",
+   "package-lock.json",
+   ".github/workflows/deploy.yml",
+   "vite.config.ts"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "SUPPLY-CHAIN-AND-RELEASE.md#Core discipline",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Mutable and unbound build inputs",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Dependency source and namespace confusion",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Build-context inclusion",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Universal moves",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Untrusted code in a privileged workflow",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Automation identity overreach",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Build-to-promotion substitution",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-supply",
+  "reviewed_paths": [
+   ".github/workflows/deploy.yml",
+   "package-lock.json",
+   "package.json",
+   "vite.config.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     "package-lock.json",
+     "package.json"
+    ],
+    "invariant": "npm deps bound to version, registry and integrity",
+    "method": "source",
+    "result": "lockfileVersion 3; 205 entries all registry.npmjs.org with sha512 integrity; no .npmrc; npm ci.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     ".github/workflows/deploy.yml"
+    ],
+    "invariant": "CI actions/tooling immutably bound",
+    "method": "source",
+    "result": "Actions pinned by major tag, node 22 floating; writers are GitHub/Node infra. Hardening.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-supply",
+    "reviewed_paths": [
+     "vite.config.ts",
+     "package.json"
+    ],
+    "invariant": "Build context excludes secrets",
+    "method": "source",
+    "result": "No public/, no env usage, no secrets; dist gitignored.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-supply",
+  "_hardening": [
+   "deploy.yml:6-9 permissions pages/id-token au niveau workflow → les déplacer au niveau du job deploy",
+   "actions épinglées par tag majeur → épingler par SHA",
+   "protéger main et restreindre l'environnement github-pages (réglages hors source)",
+   "node-version 22 flottant"
+  ]
+ },
+ {
+  "coverage_id": "package.json%23scripts.dev::vite.config.ts%23server::profile%2Fquick%2Fall-in-scope-subsystems::SUPPLY-CHAIN-AND-RELEASE.md%23Mutable%20and%20unbound%20build%20inputs",
+  "canonical_refs": {
+   "surface": "package.json#scripts.dev",
+   "boundary": "vite.config.ts#server",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "SUPPLY-CHAIN-AND-RELEASE.md#Mutable and unbound build inputs"
+  },
+  "surface": "Serveur de dev / preview Vite (poste du développeur)",
+  "boundary": "Config serveur Vite par défaut + versions vite 5.4.11 / esbuild 0.21.5 du lockfile",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Outillage épinglé à une version vulnérable (lecture cross-origin du serveur de dev)",
+  "starting_paths": [
+   "package.json",
+   "package-lock.json",
+   "vite.config.ts",
+   "index.html"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "SUPPLY-CHAIN-AND-RELEASE.md#Core discipline",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Mutable and unbound build inputs",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Universal moves",
+   "SUPPLY-CHAIN-AND-RELEASE.md#Validation rules",
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Untrusted code in a privileged workflow",
+    "reason": "CI couvert par l'unité deploy.yml"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "serveur de dev sans auth ni session"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "deferred",
+  "agent_id": null,
+  "reviewed_paths": [],
+  "local_checks": [],
+  "result_fingerprints": [],
+  "unresolved": [
+   "quick_profile_final_critic: cycle de vie serveur de dev non examiné ; vite 5.4.11 et esbuild 0.21.5 sont antérieurs à des correctifs publiés pour le serveur de dev (CORS / origine WebSocket, contournements server.fs.deny) — à vérifier hors ligne puis mettre à jour"
+  ]
+ },
+ {
+  "coverage_id": "src%2FApp.tsx%23importer::src%2Flib%2Flieux.ts%23validerLieu::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection",
+  "canonical_refs": {
+   "surface": "src/App.tsx#importer",
+   "boundary": "src/lib/lieux.ts#validerLieu",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Injection"
+  },
+  "surface": "Import de fichier JSON de lieux",
+  "boundary": "Validation champ par champ validerLieu/validerListe",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Injection (DOM/attributs/URL)",
+  "starting_paths": [
+   "src/App.tsx",
+   "src/lib/lieux.ts",
+   "src/lib/meteofrance.ts",
+   "src/lib/stations.ts",
+   "src/components/Detail.tsx",
+   "src/components/Carte.tsx"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#DOM-based XSS",
+   "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Window and opener state disclosure",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Client-side navigation confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Clickjacking",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "src/App.tsx",
+   "src/components/Carte.tsx",
+   "src/components/Detail.tsx",
+   "src/lib/lieux.ts",
+   "src/lib/meteofrance.ts",
+   "src/lib/stations.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/App.tsx",
+     "src/lib/lieux.ts",
+     "src/lib/meteofrance.ts",
+     "src/lib/stations.ts",
+     "src/components/Detail.tsx",
+     "src/components/Carte.tsx"
+    ],
+    "invariant": "Imported JSON fields cannot reach an executable URL, iframe src, attribute or HTML sink",
+    "method": "source",
+    "result": "validerLieu rebuilds a fresh object from typed fields; MF href = fixed https prefix + [a-z0-9-] slug + ^\\d{5}$ or integer id; iframe slug must be in SLUGS_VALIDES (Set.has) and is encodeURIComponent-ed; text rendered by React. No sink reachable.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/App.tsx",
+     "src/lib/lieux.ts"
+    ],
+    "invariant": "Imported id cannot pollute prototypes",
+    "method": "local",
+    "result": "Computed-key spreads create own properties; no prototype pollution. id '__proto__' only prevents its own forecast loading (self-impact).",
+    "artifact": "agents/hunter-client/artifacts/check1.txt"
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ },
+ {
+  "coverage_id": "src%2FApp.tsx%23routeId::src%2FApp.tsx%23routeId::profile%2Fquick%2Fall-in-scope-subsystems::CLIENT-SIDE.md%23Client-side%20navigation%20confusion",
+  "canonical_refs": {
+   "surface": "src/App.tsx#routeId",
+   "boundary": "src/App.tsx#routeId",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "CLIENT-SIDE.md#Client-side navigation confusion"
+  },
+  "surface": "Fragment d’URL #/lieu/{id}",
+  "boundary": "Regex + decodeURIComponent + recherche par id",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Navigation côté client",
+  "starting_paths": [
+   "src/App.tsx",
+   "src/components/Carte.tsx"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#Client-side navigation confusion",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#DOM-based XSS",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Window and opener state disclosure",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Clickjacking",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "src/App.tsx",
+   "src/components/Carte.tsx"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/App.tsx",
+     "src/components/Carte.tsx"
+    ],
+    "invariant": "Hash cannot drive navigation to attacker-chosen destinations",
+    "method": "local",
+    "result": "routeId output only used as lookup key; only navigation write is constant '#/'. '%E0' throws URIError (blank page for that link only).",
+    "artifact": "agents/hunter-client/artifacts/check1.txt"
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ },
+ {
+  "coverage_id": "src%2Fcomponents%2FDetail.tsx%23iframe.sf::src%2Flib%2Fstations.ts%23snowForecastFeedUrl::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Chained%20vulnerabilities%20and%20trust%20boundaries",
+  "canonical_refs": {
+   "surface": "src/components/Detail.tsx#iframe.sf",
+   "boundary": "src/lib/stations.ts#snowForecastFeedUrl",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Chained vulnerabilities and trust boundaries"
+  },
+  "surface": "Iframe widget Snow-Forecast",
+  "boundary": "Allowlist de slugs + sandbox + CSP frame-src",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Contenu tiers intégré",
+  "starting_paths": [
+   "src/components/Detail.tsx",
+   "src/lib/stations.ts",
+   "vite.config.ts",
+   "data/stations.json"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Chained vulnerabilities and trust boundaries",
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#Window and opener state disclosure",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#DOM-based XSS",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Client-side navigation confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Clickjacking",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "data/stations.json",
+   "src/components/Detail.tsx",
+   "src/lib/stations.ts",
+   "vite.config.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/components/Detail.tsx",
+     "src/lib/stations.ts",
+     "vite.config.ts",
+     "data/stations.json"
+    ],
+    "invariant": "Iframe limited to allowlisted feeds, cannot script or reach app origin/opener",
+    "method": "source",
+    "result": "Allowlist enforced; sandbox omits allow-scripts/allow-same-origin/allow-top-navigation; CSP frame-src; no-referrer; links noopener.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ },
+ {
+  "coverage_id": "src%2Flib%2Fforecast.ts%23lireCache::src%2Flib%2Flieux.ts%23charger::profile%2Fquick%2Fall-in-scope-subsystems::CLIENT-SIDE.md%23Cross-context%20storage%20and%20broadcast%20confusion",
+  "canonical_refs": {
+   "surface": "src/lib/forecast.ts#lireCache",
+   "boundary": "src/lib/lieux.ts#charger",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion"
+  },
+  "surface": "Lecture localStorage (lieux et cache)",
+  "boundary": "Validation au chargement / TTL cache",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Stockage partagé entre contextes de même origine",
+  "starting_paths": [
+   "src/lib/forecast.ts",
+   "src/lib/lieux.ts",
+   "src/App.tsx",
+   "src/components/ModelBadge.tsx"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Chained vulnerabilities and trust boundaries",
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+   "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#DOM-based XSS",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Window and opener state disclosure",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Client-side navigation confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Clickjacking",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "src/App.tsx",
+   "src/components/ModelBadge.tsx",
+   "src/lib/forecast.ts",
+   "src/lib/lieux.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/lib/forecast.ts",
+     "src/lib/lieux.ts",
+     "src/App.tsx",
+     "src/components/ModelBadge.tsx"
+    ],
+    "invariant": "Same-origin localStorage records cannot escalate to script execution or cross-account state",
+    "method": "source",
+    "result": "wf.lieux.v1 revalidated; wf.cache.v1.* unvalidated but consumed only by text/numeric/static-SVG/escaped-className sinks; worst case render exception. Only writer is same-origin content that already has script access.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ },
+ {
+  "coverage_id": "src%2Flib%2Fgeocoding.ts%23chercher::src%2Flib%2Fgeocoding.ts%23versLieu::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection",
+  "canonical_refs": {
+   "surface": "src/lib/geocoding.ts#chercher",
+   "boundary": "src/lib/geocoding.ts#versLieu",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Injection"
+  },
+  "surface": "Réponses Open-Meteo (géocodage et prévision)",
+  "boundary": "Conversion versLieu / parseHourly",
+  "subsystem": "Tous les sous-systèmes en périmètre (profil quick)",
+  "attack_class": "Injection depuis données tierces",
+  "starting_paths": [
+   "src/lib/geocoding.ts",
+   "src/lib/forecast.ts",
+   "src/components/Ajout.tsx",
+   "src/components/ModelBadge.tsx",
+   "src/components/Icon.tsx",
+   "src/lib/weathercode.ts"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#DOM-based XSS",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "CLIENT-SIDE.md#Prototype pollution and gadget chain",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Cross-context storage and broadcast confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Browser-storage disclosure and stale authorization",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Window and opener state disclosure",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Client-side navigation confusion",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Clickjacking",
+    "reason": "couvert par une autre unité de ce run"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "aucun serveur, session ni authentification dans la source"
+   },
+   {
+    "block": "CLOUD-AND-DEPLOYMENT.md#Core discipline",
+    "reason": "aucune IaC/identité cloud ; réglages Pages hors source"
+   },
+   {
+    "block": "DATA-ISOLATION-AND-LIFECYCLE.md#Core discipline",
+    "reason": "mono-utilisateur, pas de données multi-locataires"
+   },
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+    "reason": "aucun service partagé ; coûts/quota = auto-impact navigateur"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "src/components/Ajout.tsx",
+   "src/components/Icon.tsx",
+   "src/components/ModelBadge.tsx",
+   "src/lib/forecast.ts",
+   "src/lib/geocoding.ts",
+   "src/lib/weathercode.ts"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/lib/geocoding.ts",
+     "src/components/Ajout.tsx",
+     "src/lib/forecast.ts"
+    ],
+    "invariant": "Open-Meteo response fields reach only escaped text or numeric sinks",
+    "method": "source",
+    "result": "name/admin1/country rendered as React text; versLieu output feeds text, toFixed and slugified/regex-constrained URL parts; reason rendered as text; parseHourly keeps finite numbers. Malformed types can only throw in render (availability vs compromised provider).",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "src/components/Icon.tsx",
+     "src/lib/weathercode.ts",
+     "src/components/ModelBadge.tsx"
+    ],
+    "invariant": "The single dangerouslySetInnerHTML only receives static package SVG",
+    "method": "source",
+    "result": "Icon receives static typed map or switch-selected SVG; no third-party string reaches it.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "_hunter": "hunter-client",
+  "_hardening": [
+   "App.tsx:14 decodeURIComponent sans try/catch (#/lieu/%E0 → page blanche) ; ajouter un error boundary",
+   "geocoding.ts:18-32 versLieu sans validerLieu ; MAX_LIEUX non appliqué à l'ajout (App.tsx:104) → au rechargement validerListe lève et la liste revient à l'initiale (perte de données)",
+   "forecast.ts:100-109 cache non validé (RangeError possible dans heureLocale)",
+   "etats objet simple : id '__proto__' admis par la regex → Map/Object.create(null) ou regex ^gn-\\d+$",
+   "frame-ancestors impossible via meta, GitHub Pages n'envoie pas X-Frame-Options"
+  ]
+ }
+]
