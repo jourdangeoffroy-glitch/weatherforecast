@@ -84,6 +84,7 @@ describe('URL', () => {
     const arc = LISTE_INITIALE.find((l) => l.nom === 'Arc 1800')!;
     expect(meteoFranceUrl(lyon)).toBe('https://meteofrance.com/previsions-meteo-france/lyon/69000');
     expect(meteoFranceUrl(rova)).toBe('https://meteofrance.com/meteo-monde/rovaniemi/638936');
+    expect(meteoFranceUrl(LISTE_INITIALE.find((l) => l.nom === 'Winnipeg')!)).toBeNull();
     expect(meteoFranceUrl(arc)).toBe('https://meteofrance.com/previsions-meteo-france/bourg-saint-maurice/73700');
   });
   it('slug et code postal', () => {

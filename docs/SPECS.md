@@ -36,11 +36,11 @@ type Lieu = {
 - J+1 → horizon : **demi-journée** (matin / après-midi).
 - Badge modèle **par jour** (AROME HD → ARPEGE ; hors Europe : ARPEGE World). Horizon : J0 → J+3.
 - Lien source : meteofrance.com (formats vérifiés le 2026-11-12 par requête HTTP).
-  - Hors France : `/meteo-monde/{slug}/{geonamesId}` — 200 pour Toronto, Rovaniemi, Lappeenranta. **Le slug compte** (`/meteo-monde/xyz/6167865` → 404). **Winnipeg (6183235) → 404** quel que soit le slug testé : non résolu.
+  - Hors France : `/meteo-monde/{slug}/{geonamesId}` — 200 pour Toronto, Rovaniemi, Lappeenranta. **Le slug compte** (`/meteo-monde/xyz/6167865` → 404). **Winnipeg (6183235) → 404** quel que soit le slug testé ⇒ lien masqué (liste `SANS_LIEN_METEOFRANCE`, décision PO 2026-11-12).
   - France : `/previsions-meteo-france/{slug}/{code postal}` — 200 pour lyon/69000, le-grand-bornand/74450, les-deux-alpes/38520, bourg-saint-maurice/73700 (Arc 1800). **lyon/69001 → 404** ⇒ règle : code « xx000 » s'il existe, sinon premier code à 5 chiffres hors CEDEX (non garanti pour toute commune).
 - Changement de catégorie Villes ↔ Montagne depuis le détail (ou la liste).
 - Montagne : widget Snow-Forecast `https://www.snow-forecast.com/resorts/{slug}/forecasts/feed/mid/m` (HTML statique, sans script, pas de `X-Frame-Options`) dans une iframe `sandbox="allow-popups allow-popups-to-escape-sandbox"` (scripts interdits) + lien vers la page de la station.
-- J+1 → J+3 : Matin = 06 h–12 h, Après-midi = 12 h–18 h, heure locale du lieu (hypothèse de dev, la nuit n'est pas affichée).
+- J+1 → J+3 : Matin = 06 h–12 h, Après-midi = 12 h–18 h, heure locale du lieu (validé PO 2026-11-12 ; la nuit n'est pas affichée).
 - J0 : heures restantes à partir de l'heure locale du lieu.
 - Ajout : onglet **Ville** (géocodage Open-Meteo, catégorie auto) ou onglet **Station** (uniquement `data/stations.json`). Une ville > 1 200 m ajoutée par géocodage devient Montagne **sans widget** (météo Open-Meteo seule).
   - Slugs vérifiés dans le sitemap Snow-Forecast le 2026-11-12. `Les-Arcs` couvre tout le domaine (pas de slug propre à Arc 1800).
@@ -90,9 +90,8 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 - `security-audit` avant chaque merge et chaque mise en production.
 
 ## 9. Questions ouvertes
-1. Winnipeg : lien Météo-France en 404 — trouver l'identifiant utilisé par meteofrance.com.
-2. Valider en navigateur la réponse multi-modèles d'Open-Meteo (quota épuisé côté dev).
-3. Créneaux demi-journée (06–12 / 12–18) : à confirmer par le PO.
+1. Valider en navigateur la réponse multi-modèles d'Open-Meteo (quota épuisé côté dev).
+- Tranché : demi-journées 06–12 / 12–18 ; lien Météo-France Winnipeg masqué.
 - Tranché : format d'URL meteofrance.com France ; attribution du modèle sans limites de domaine codées en dur.
 - Tranché : V1 100 % Météo-France ; liste initiale de 7 lieux (§5 bis) ; stations françaises uniquement, liste manuelle (`data/stations.json`).
 - Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
@@ -106,6 +105,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
 | 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
+| 2026-11-12 | 1.0-dev.1 | Demi-journées 06–12 / 12–18 validées, lien Météo-France Winnipeg masqué |
 | 2026-11-12 | 1.0-dev | Développement V1 (F1–F8), URL Météo-France vérifiées, CSP, tests, workflow Pages |
 | 2026-11-12 | 0.8 | Liste manuelle des stations (3 stations), specs prêtes pour le dev |
 | 2026-11-12 | 0.7.1 | Stations limitées à la France ; jeu data.gouv.fr Nice Côte d'Azur écarté |

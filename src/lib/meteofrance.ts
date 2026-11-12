@@ -13,7 +13,11 @@ export function slugifier(nom: string): string {
  *  - monde  : /meteo-monde/{slug}/{geonamesId}           (Toronto, Rovaniemi, Lappeenranta)
  *  - France : /previsions-meteo-france/{slug}/{code postal} (Lyon/69000, Le Grand-Bornand/74450)
  *  Le slug compte (un slug faux renvoie 404). Winnipeg/6183235 renvoie 404 : couverture incomplète du site. */
+/** Lieux dont la page meteofrance.com renvoie 404 (vérifié) : lien masqué. Winnipeg : décision PO 2026-11-12. */
+export const SANS_LIEN_METEOFRANCE = new Set<number>([6183235]);
+
 export function meteoFranceUrl(l: Lieu): string | null {
+  if (SANS_LIEN_METEOFRANCE.has(l.geonamesId)) return null;
   const slug = l.meteoFranceSlug ?? slugifier(l.nom);
   if (l.pays === 'FR') {
     return l.codePostal ? `https://meteofrance.com/previsions-meteo-france/${slug}/${l.codePostal}` : null;

@@ -111,7 +111,7 @@ export function Detail({ lieu, etat, onCategorie, onSupprimer }: Props) {
             Voir sur Météo-France <Icon name="ext" />
           </a>
         ) : (
-          <p className="caption muted">Lien Météo-France indisponible (code postal inconnu).</p>
+          <p className="caption muted">Pas de page Météo-France disponible pour ce lieu.</p>
         )}
         <p className="caption muted">
           Horizon de l'app : {JOURS_MAX} jours (modèles bruts). Météo-France publie jusqu'à 15 jours, avec une prévision

@@ -58,7 +58,7 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | CGU Snow-Forecast (licence perso non commerciale, pas de reproduction du site) | Republier leur base serait non conforme | Résolu : on ne stocke que les slugs des stations utilisées |
 | Le Grand-Bornand (village ≈ 950 m) classé « Ville » par la règle 1 200 m | Mauvaise catégorie | Forcé « Montagne » dans la liste initiale |
 | Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | Export / import JSON (F8) ; synchro plus tard |
-| Lien Météo-France Winnipeg (`/meteo-monde/winnipeg/6183235`) renvoie 404 | Lien mort pour ce lieu | Ouvert : identifiant Météo-France à trouver |
+| Lien Météo-France Winnipeg (`/meteo-monde/winnipeg/6183235`) renvoie 404 | Lien mort pour ce lieu | Lien masqué (décision PO 2026-11-12) |
 | Quota Open-Meteo par IP (10 000/j) | Partagé si IP commune (constaté sur le proxy cloud de dev, pas chez l'utilisateur) | Cache 30 min, 1 appel/lieu |
 | GitHub Pages sans en-têtes HTTP | CSP via `<meta>` : `frame-ancestors` impossible (clickjacking non bloqué) | Accepté (pas d'action sensible) |
 
