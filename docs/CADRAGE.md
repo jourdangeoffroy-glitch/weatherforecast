@@ -1,6 +1,6 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.7 — cadrage finalisé (1 décision en attente : liste Snow-Forecast) (aucun code produit)
+> **Statut** : v0.8 — cadrage finalisé (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
@@ -15,8 +15,8 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | F3 | Badge du **modèle** utilisé, par lieu et par jour | Validé |
 | F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Validé |
 | F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (ex. monde : `meteofrance.com/meteo-monde/toronto/6167865`) | Validé |
-| F6 | Détail Montagne : widget Snow-Forecast ; à l'ajout, vérification auto que le lieu est une station Snow-Forecast | Validé — méthode technique à valider |
-| F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes | Validé |
+| F6 | Détail Montagne : widget Snow-Forecast. Stations **françaises uniquement**, listées dans `data/stations.json`, enrichie à la main au fil des ajouts | Validé |
+| F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes, Arc 1800 | Validé |
 | F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Validé |
 
 **Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
@@ -54,8 +54,8 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | Lieu Montagne sans station Snow-Forecast | Widget absent | Afficher la météo Open-Meteo seule |
 | Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Catégorie modifiable à la main par lieu |
 | Chiffres app ≠ meteofrance.com (le site publie une prévision retravaillée, pas le modèle brut) | Écarts de quelques °C possibles | Libellé « Voir sur Météo-France » |
-| Vérification Snow-Forecast depuis le navigateur bloquée (CORS, pas d'API publique) | Ajout montagne non vérifiable côté client | Liste de stations générée depuis le sitemap Snow-Forecast (cf. SPECS §4) |
-| CGU Snow-Forecast lues le 2026-11-12 : `robots.txt` autorise le sitemap et `/resorts/*/6day` ; CGU : licence « personnelle et non commerciale », interdiction de « reproduire, dupliquer, copier » le site hors de ce cadre ; droits sur les bases de données revendiqués | Publier la liste complète (3 224 stations) dans un repo **public** = redistribution, zone grise | Décision PO en attente (cf. SPECS §9) |
+| Ajout d'une station hors liste | Pas de widget | Ajout manuel dans `data/stations.json` (slug vérifié sur snow-forecast.com) |
+| CGU Snow-Forecast (licence perso non commerciale, pas de reproduction du site) | Republier leur base serait non conforme | Résolu : on ne stocke que les slugs des stations utilisées |
 | Le Grand-Bornand (village ≈ 950 m) classé « Ville » par la règle 1 200 m | Mauvaise catégorie | Forcé « Montagne » dans la liste initiale |
 | Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | À trancher (cf. SPECS §9) |
 

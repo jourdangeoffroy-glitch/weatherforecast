@@ -1,6 +1,6 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v0.7 — en cours de rédaction avec le PO
+> **Statut** : v0.8 — prête pour le développement de rédaction avec le PO
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
@@ -37,10 +37,8 @@ type Lieu = {
   - France : format d'URL **à vérifier** (probablement `/previsions-meteo-france/{ville}/{code postal}`).
 - Changement de catégorie Villes ↔ Montagne depuis le détail (ou la liste).
 - Montagne : widget Snow-Forecast (station associée) dans une iframe `sandbox`.
-- Ajout d'un lieu Montagne : doit correspondre à une station Snow-Forecast. Le navigateur ne peut pas interroger snow-forecast.com (pas d'API publique, CORS) ⇒ proposition : **liste de stations embarquée** (`resorts.json` : nom, slug Snow-Forecast, lat/lon), recherche par nom/proximité, ajout refusé si aucune station.
-  - **Source retenue : sitemap de snow-forecast.com** (option B), via une GitHub Action mensuelle qui régénère `resorts.json` et ouvre un commit. Données minimales : nom + slug (le sitemap ne donne pas les coordonnées ⇒ correspondance par nom ; coordonnées à obtenir autrement, à étudier).
-  - Vérifié le 2026-11-12 : sitemap `https://www.snow-forecast.com/sitemap.gz` = **3 224 stations** (URL `/resorts/{slug}/6day/mid`). Slugs liste initiale : `Le-Grand-Bornand`, `Les-Deux-Alpes`.
-  - CGU : usage personnel non commercial autorisé ; reproduction du site hors de ce cadre interdite ⇒ publication de la liste dans le repo public **à trancher**.
+- Ajout d'un lieu Montagne : choisi dans `data/stations.json` (stations françaises, enrichi à la main). Ajout refusé si la station n'y est pas.
+  - Slugs vérifiés dans le sitemap Snow-Forecast le 2026-11-12. `Les-Arcs` couvre tout le domaine (pas de slug propre à Arc 1800).
 
 ## 5. Sources par zone
 Endpoint unique : Open-Meteo `/v1/meteofrance`, modèle demandé explicitement.
@@ -62,8 +60,9 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | Winnipeg | CA | Ville | ARPEGE World | |
 | Rovaniemi | FI | Ville (décision PO, malgré la station Ounasvaara) | ARPEGE Europe | |
 | Lappeenranta | FI | Ville | ARPEGE Europe | |
-| Le Grand-Bornand | FR | Montagne (forcée) | AROME HD → ARPEGE | village ≈ 950 m < 1 200 m |
-| Les Deux Alpes | FR | Montagne | AROME HD → ARPEGE | ≈ 1 650 m |
+| Le Grand-Bornand | FR | Montagne (forcée) | AROME HD → ARPEGE | village 919 m < 1 200 m |
+| Les Deux Alpes | FR | Montagne | AROME HD → ARPEGE | 1 650 m |
+| Arc 1800 | FR | Montagne | AROME HD → ARPEGE | 1 800 m ; widget `Les-Arcs` |
 
 ## 6. Non-fonctionnel
 - Responsive **mobile d'abord** : 1 colonne < 600 px, 2 colonnes 600–1023 px, 3–4 colonnes ≥ 1 024 px (tokens Névé v0.3).
@@ -83,7 +82,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 9. Questions ouvertes
 1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
 2. Liste initiale des lieux.
-3. Liste des stations : **France uniquement** (décision PO). Jeu data.gouv.fr « Cartographie des stations de ski de la Métropole » écarté : il couvre la **Métropole Nice Côte d'Azur** seulement (données 2015, source non joignable). Source alternative à valider.
+- Tranché : stations françaises uniquement, liste manuelle progressive (`data/stations.json`).
 4. Formats d'URL meteofrance.com (France) et limites des domaines des modèles.
 - Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
 
@@ -96,5 +95,6 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
 | 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
+| 2026-11-12 | 0.8 | Liste manuelle des stations (3 stations), specs prêtes pour le dev |
 | 2026-11-12 | 0.7.1 | Stations limitées à la France ; jeu data.gouv.fr Nice Côte d'Azur écarté |
 | 2026-11-12 | 0.7 | CGU + sitemap Snow-Forecast vérifiés, Rovaniemi = Ville, environnement réseau « weatherforecast » créé |
