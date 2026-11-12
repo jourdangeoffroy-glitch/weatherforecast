@@ -1,6 +1,6 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.1 — brouillon, en cours de cadrage (aucun code produit)
+> **Statut** : v0.2 — brouillon, en cours de cadrage (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
@@ -22,12 +22,19 @@ Application desktop permettant un **aperçu rapide** des prévisions météo de 
 - Version mobile ou web
 
 ## 3. Sources de données
-| Zone | Source | Statut |
-|------|--------|--------|
-| France | Météo-France (AROME / ARPEGE) | Validé (brief) — mode d'accès à décider |
-| Hors France | Selon fichier `.md` de recommandations | **Bloquant : fichier non reçu** |
+Référence : `docs/sources/api_meteo_gratuites.md`.
 
-**Point d'attention** : les modèles Météo-France ont un horizon court (ordre de grandeur, à vérifier : AROME ≈ 2 j, ARPEGE ≈ 4 j). Le site meteofrance.com affiche jusqu'à ~15 j via une prévision consolidée qui n'est pas un modèle brut exposé tel quel. « Jours suivants autorisés par le modèle » = donc **2 à 4 j** pour la France si on reste sur les modèles bruts.
+| Zone | Source | Modèle | Horizon | Statut |
+|------|--------|--------|---------|--------|
+| France | Open-Meteo `/v1/meteofrance` | AROME (1,5 km) / ARPEGE | 168 h annoncé (à vérifier : ARPEGE ≈ 4 j) | Recommandé V1 |
+| Hors France | Open-Meteo `/v1/forecast` | `best_match` ou modèle explicite (ECMWF, ICON, GFS…) | jusqu'à 16 j | Recommandé V1 |
+| Montagne (option) | Snow-Forecast | GFS | 6 j | **Non retenu V1** : flux sur demande, widget = HTML distant |
+| Alertes (option) | Vigilance Météo-France / OpenWeather | — | — | Hors V1 (proposé) |
+
+**Points d'attention**
+- `best_match` choisit le modèle automatiquement, mais la réponse **n'indique pas le modèle retenu** (à vérifier). Or F3 exige d'afficher le modèle ⇒ demander un **modèle explicite** par lieu.
+- Open-Meteo gratuit = **non commercial**, 10 000 appels/j, licence CC BY 4.0 ⇒ **attribution obligatoire** dans l'UI.
+- Le site meteofrance.com (lien source F5) affiche ~15 j via une prévision consolidée : l'utilisateur verra plus de jours sur la source que dans l'app.
 
 ## 4. Contraintes techniques
 - **Stack** : Electron
@@ -39,7 +46,7 @@ Application desktop permettant un **aperçu rapide** des prévisions météo de 
 ## 5. Risques identifiés
 | Risque | Impact | Mitigation |
 |--------|--------|-----------|
-| Clé API embarquée dans le binaire Electron = extractible | Fuite de clé, quota épuisé | Source sans clé, ou proxy backend |
+| Clé API embarquée dans le binaire Electron = extractible | Fuite de clé, quota épuisé | Open-Meteo sans clé ⇒ risque écarté en V1 |
 | Licence/CGU des sources (usage commercial ?) | Blocage juridique | Valider l'usage (perso vs commercial) |
 | Horizon de prévision court côté Météo-France | Détail limité à 2–4 j | Assumer et l'afficher, ou compléter par un autre modèle |
 | Surface d'attaque Electron (nodeIntegration, contextIsolation) | RCE | Checklist sécurité Electron + security-audit |
@@ -53,5 +60,6 @@ Voir `SPECS.md` §8.
 
 ## 8. Sources
 - Météo-France API : https://portail-api.meteofrance.fr
+- Recommandations sources : `docs/sources/api_meteo_gratuites.md`
 - Open-Meteo (modèles Météo-France, sans clé) : https://open-meteo.com/en/docs/meteofrance-api
 - Sécurité Electron : https://www.electronjs.org/docs/latest/tutorial/security

@@ -1,6 +1,6 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v0.1 — squelette, à compléter avec le PO
+> **Statut** : v0.2 — squelette, à compléter avec le PO
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
@@ -30,10 +30,13 @@ type Lieu = {
 - Lien « Voir sur la source » → ouverture dans le navigateur système (`shell.openExternal`, URL whitelistée).
 
 ## 5. Sources par zone
-| Zone | Provider | Modèle | Horizon | Accès |
-|------|----------|--------|---------|-------|
-| France | Météo-France | AROME / ARPEGE | 2–4 j (à vérifier) | À décider |
-| Hors France | — | — | — | **En attente du fichier .md** |
+| Zone | Provider | Endpoint | Modèle | Horizon | Accès |
+|------|----------|----------|--------|---------|-------|
+| France (`pays=FR`) | Météo-France via Open-Meteo | `/v1/meteofrance` | `arome_seamless` / `arpege_seamless` | 168 h annoncé (à vérifier) | Sans clé |
+| Hors France | Open-Meteo | `/v1/forecast` | modèle explicite par lieu (à choisir) | ≤ 16 j | Sans clé |
+
+- Attribution « Open-Meteo, CC BY 4.0 » + nom du modèle affichés.
+- Quota : 10 000 appels/j ⇒ cache local obligatoire.
 
 ## 6. Non-fonctionnel
 - Rafraîchissement / cache : à définir.
@@ -51,3 +54,4 @@ Voir conversation en cours — à reporter ici une fois tranchées.
 | Date | Version | Changement |
 |------|---------|-----------|
 | 2026-11-12 | 0.1 | Création squelette cadrage + specs |
+| 2026-11-12 | 0.2 | Intégration des recommandations de sources (Open-Meteo) |
