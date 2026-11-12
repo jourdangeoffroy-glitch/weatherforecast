@@ -1,20 +1,20 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.3 — cadrage en cours (aucun code produit)
+> **Statut** : v0.4 — cadrage en cours (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
 ## 1. Objectif
-Application **web** d'aperçu rapide des prévisions météo de plusieurs lieux, avec **transparence sur le modèle météo** utilisé pour chaque lieu. Usage **personnel** (1 utilisateur).
+Application **web responsive (mobile → desktop)** d'aperçu rapide des prévisions météo de plusieurs lieux, avec **transparence sur le modèle météo** utilisé pour chaque lieu. Usage **personnel** (1 utilisateur).
 
 ## 2. Périmètre fonctionnel (MVP)
 | # | Fonction | Statut |
 |---|----------|--------|
 | F1 | Accueil : météo du jour pour tous les lieux (T° min/max, icône, pluie, vent) | Validé |
-| F2 | 2 catégories : **Villes** / **Montagne** (montagne = altitude > 1 200 m) | Validé |
+| F2 | 2 catégories : **Villes** / **Montagne** — attribution auto (altitude > 1 200 m), modifiable manuellement | Validé |
 | F3 | Badge du **modèle** utilisé, par lieu et par jour | Validé |
 | F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Validé |
-| F5 | Détail : lien vers la page source | Cible du lien hors France à décider |
+| F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (France et hors France) | Validé — existence des pages monde à vérifier |
 | F6 | Détail Montagne : widget Snow-Forecast | Validé |
 | F7 | Ajout / suppression de lieux (liste initiale fixe) | Validé |
 
@@ -38,10 +38,10 @@ Référence : `docs/sources/api_meteo_gratuites.md`.
 
 ## 4. Contraintes techniques
 - **Stack** : application web (Electron abandonné). Proposition : TypeScript + React + Vite, site statique (cf. SPECS §1).
-- **Design system** : DS Geoffroy / Névé (https://claude.ai/artifact/WNQ359bdKwMqxC5fNM1gb7). Pensé pour Electron : partie fenêtre à adapter (cf. SPECS §7).
-- **Repo** : `jourdangeoffroy-glitch/weatherforecast`
+- **Design system** : DS Geoffroy / Névé v0.3 (https://claude.ai/artifact/WNQ359bdKwMqxC5fNM1gb7), adapté au web responsive le 2026-11-12.
+- **Repo** : `jourdangeoffroy-glitch/weatherforecast` (**public**)
 - **Sécurité** : skill `security-audit` avant chaque merge sur `main` et chaque mise en production.
-- **Hébergement** : site statique (GitHub Pages / Cloudflare Pages / Netlify), sans backend car Open-Meteo ne demande pas de clé.
+- **Hébergement** : en ligne, URL publique. Proposé : **GitHub Pages** (gratuit car repo public), déploiement auto via GitHub Actions → `https://jourdangeoffroy-glitch.github.io/weatherforecast/`. Pas de backend (Open-Meteo sans clé).
 
 ## 5. Risques
 | Risque | Impact | Mitigation |
@@ -49,8 +49,9 @@ Référence : `docs/sources/api_meteo_gratuites.md`.
 | Horizon Météo-France court (4 j) | Détail France limité | Complément ECMWF + badge par jour |
 | Widget Snow-Forecast = script/HTML tiers | Injection de contenu tiers | Iframe isolée (`sandbox`), CSP restreinte |
 | Lieu Montagne sans station Snow-Forecast | Widget absent | Afficher la météo Open-Meteo seule |
-| Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Seuil modifiable à la main par lieu (à valider) |
-| Lieux stockés en `localStorage` | Perte si cache vidé / autre appareil | Export/import JSON (à valider) |
+| Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Catégorie modifiable à la main par lieu |
+| Lien meteofrance.com hors France alors que les données viennent d'un autre modèle | Chiffres différents entre l'app et la page liée | Libellé explicite « Voir aussi sur Météo-France » |
+| Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | À trancher (cf. SPECS §9) |
 
 ## 6. Gouvernance
 - Mise à jour obligatoire de `CADRAGE.md` + `SPECS.md` à chaque changement.

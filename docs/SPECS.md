@@ -1,6 +1,6 @@
 # Spécifications — WeatherForecast
 
-> **Statut** : v0.3 — en cours de rédaction avec le PO
+> **Statut** : v0.4 — en cours de rédaction avec le PO
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : reflète en continu l'état réel de l'application (synchronisé avec `CADRAGE.md`).
 
@@ -16,7 +16,8 @@
 type Lieu = {
   id: string; nom: string; pays: string;          // ISO-3166 alpha-2
   lat: number; lon: number; altitude: number;
-  categorie: 'ville' | 'montagne';                 // auto : altitude > 1200 m
+  categorie: 'ville' | 'montagne';                 // auto : altitude > 1200 m à l'ajout
+  categorieManuelle?: boolean;                     // true si l'utilisateur l'a modifiée
   snowForecastResort?: string;                     // id station, si montagne
 };
 ```
@@ -30,7 +31,8 @@ type Lieu = {
 - J0 : pas **horaire**.
 - J+1 → horizon : **demi-journée** (matin / après-midi).
 - Badge modèle **par jour** (France : AROME → ARPEGE → ECMWF).
-- Lien source : France → page ville meteofrance.com ; hors France → **à décider**.
+- Lien source : page de la ville sur **meteofrance.com**, pour tous les lieux. Hors France, libellé « Voir aussi sur Météo-France » (les données affichées viennent d'un autre modèle). Format d'URL des pages monde **à vérifier** ; repli : page de recherche meteofrance.com.
+- Changement de catégorie Villes ↔ Montagne depuis le détail (ou la liste).
 - Montagne : widget Snow-Forecast (station associée) dans une iframe `sandbox`.
 
 ## 5. Sources par zone
@@ -44,12 +46,14 @@ type Lieu = {
 Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (ex. 30 min) pour rester sous 10 000 appels/j.
 
 ## 6. Non-fonctionnel
-- Responsive : à valider (desktop seul ou mobile aussi).
+- Responsive **mobile d'abord** : 1 colonne < 600 px, 2 colonnes 600–1023 px, 3–4 colonnes ≥ 1 024 px (tokens Névé v0.3).
+- Hébergement : GitHub Pages via GitHub Actions (build Vite, `base: '/weatherforecast/'`).
 - Rafraîchissement : à définir.
 
 ## 7. Design system (Névé)
 - Réutilisable tel quel : `tokens.css`, polices, icônes, couleurs, rayons, `.mono` pour les chiffres.
-- À adapter : barre de titre Electron (44 px, `titleBarOverlay`, `trafficLightPosition`) → en-tête web ; thème sombre via `prefers-color-scheme` + `data-theme` au lieu de `nativeTheme`.
+- **Adapté (v0.3, 2026-11-12)** : en-tête web `.app-header` (56 px) à la place de la barre de titre Electron ; `.container` responsive (marges 16/24/32 px) ; zones sûres iPhone ; cibles tactiles 44 px ; typo réduite < 600 px ; thème sombre via `prefers-color-scheme` / `data-theme` ; sélection de texte réactivée.
+- Non modifié : la page canvas « Design System Montagne » (maquettes), qui peut encore montrer un cadre de fenêtre desktop.
 
 ## 8. Sécurité
 - CSP stricte ; seuls domaines autorisés : `api.open-meteo.com`, `geocoding-api.open-meteo.com`, snow-forecast.com (iframe).
@@ -57,12 +61,10 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 - `security-audit` avant chaque merge et chaque mise en production.
 
 ## 9. Questions ouvertes
-1. Cible du lien source hors France.
-2. Table « zone → modèle le plus fin ».
-3. Responsive mobile ?
-4. Hébergeur, et repo public ou privé.
-5. Seuil 1 200 m : automatique seulement, ou modifiable par lieu ?
-6. Liste initiale des lieux.
+1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
+2. Liste initiale des lieux.
+3. Synchronisation des lieux entre appareils (localStorage = une liste par navigateur).
+4. Association lieu Montagne → station Snow-Forecast.
 
 ## 10. Historique
 | Date | Version | Changement |
@@ -70,3 +72,4 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.1 | Création squelette cadrage + specs |
 | 2026-11-12 | 0.2 | Intégration des recommandations de sources |
 | 2026-11-12 | 0.3 | Passage en app web, découpage des modèles France, Snow-Forecast, F7 |
+| 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
