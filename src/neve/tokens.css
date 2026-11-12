@@ -1,0 +1,128 @@
+/* Névé design system v0.3 · tokens + base pour application web responsive (mobile → desktop) · thèmes clair et sombre */
+
+@font-face { font-family: "Hanken Grotesk"; src: url("./fonts/HankenGrotesk-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("./fonts/JetBrainsMono-Variable.woff2") format("woff2"); font-weight: 100 800; font-display: block; }
+
+:root {
+  /* Névé (neutres) */
+  --neve-0: #FFFFFF; --neve-50: #F5F8FA; --neve-100: #EEF3F7; --neve-200: #DCE4EB;
+  --neve-300: #C2CED9; --neve-500: #6A7A8A; --neve-600: #5A6B7C; --neve-700: #46576A; --neve-900: #1B2A3A;
+  /* Crépuscule (bleu) */
+  --crep-100: #E3ECF6; --crep-200: #C7DAEE; --crep-400: #7FA3CC; --crep-600: #2E5486; --crep-700: #1D3A63; --crep-800: #16304F;
+  /* Rouge */
+  --rouge-100: #FCE6E3; --rouge-300: #F3A79E; --rouge-500: #E04B3C; --rouge-600: #C93A2B; --rouge-700: #B4321F;
+  /* Sémantique */
+  --bg-app: var(--neve-100); --bg-surface: var(--neve-0); --bg-subtle: var(--neve-50); --bg-raised: var(--neve-100);
+  --text: var(--neve-900); --text-2: var(--neve-700); --text-muted: var(--neve-600); /* 4,9:1 sur bg-app (neve-500 : 3,95:1, insuffisant) */ --border: var(--neve-200);
+  --primary: var(--crep-700); --primary-hover: var(--crep-800); --primary-soft: var(--crep-100); --on-primary: #FFFFFF;
+  --accent: var(--rouge-600); --accent-hover: var(--rouge-700); --on-accent: #FFFFFF; /* blanc sur rouge-600 : 5,1:1 (rouge-500 : 4,0:1) */
+  --scroll-thumb: var(--neve-300); --scroll-thumb-hover: var(--neve-500);
+  --info-fg: #1D3A63; --info-bg: #E3ECF6;
+  --success-fg: #1F6B4F; --success-bg: #E1F3EC;
+  --warning-fg: #8A5A00; --warning-bg: #FBF0D9;
+  --danger-fg: #B4321F; --danger-bg: #FCE6E3;
+  /* Typo */
+  --font-sans: "Hanken Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --fs-display: 72px; --fs-h1: 32px; --fs-h2: 22px; --fs-h3: 16px; --fs-body: 15px; --fs-caption: 13px; --fs-label: 12px;
+  /* Espacements (base 4) */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px; --sp-12: 48px;
+  /* Rayons */
+  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-pill: 999px;
+  /* Élévation */
+  --shadow-card: 0 2px 8px rgba(29, 58, 99, .08);
+  --shadow-pop: 0 8px 24px rgba(29, 58, 99, .14);
+  --shadow-window: 0 20px 60px rgba(29, 58, 99, .18);
+  --focus-ring: 0 0 0 2px var(--crep-700), 0 0 0 5px var(--crep-200);
+  color-scheme: light;
+  /* En-tête web + responsive */
+  --header-h: 56px;
+  --touch-min: 44px; /* cible tactile minimale (WCAG 2.5.5) */
+  --gutter: var(--sp-4); /* marge latérale : 16px mobile, 24px ≥ 600px, 32px ≥ 1024px */
+  --content-max: 1200px;
+  /* Points de rupture (référence, non utilisables dans @media) : 600px tablette, 1024px desktop */
+  --icon-ui: 20px; --icon-lg: 24px;
+}
+
+/* Échelle typo et marges selon la largeur */
+@media (max-width: 599px) { :root { --fs-display: 48px; --fs-h1: 26px; --fs-h2: 20px; } }
+@media (min-width: 600px) { :root { --gutter: var(--sp-6); } }
+@media (min-width: 1024px) { :root { --gutter: var(--sp-8); } }
+
+/* ---------- Thème sombre ----------
+   Suit le réglage du navigateur / de l'OS (prefers-color-scheme),
+   sauf si <html data-theme="light"> force le clair. <html data-theme="dark"> force le sombre. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg-app: #0F1A26; --bg-surface: #172433; --bg-subtle: #1E2D3E; --bg-raised: #24364A;
+  --text: #EEF3F7; --text-2: #C2CED9; --text-muted: #8FA0B2; --border: #2A3B4F;
+  --primary: #7FA3CC; --primary-hover: #9DBADB; --primary-soft: #1D3A63; --on-primary: #0F1A26;
+  --accent: #F07A6C; --accent-hover: #F3A79E; --on-accent: #0F1A26;
+  --info-fg: #C7DAEE; --info-bg: #1D3A63;
+  --success-fg: #8ED4B5; --success-bg: #133D2F;
+  --warning-fg: #F2C46D; --warning-bg: #3D2D0A;
+  --danger-fg: #F3A79E; --danger-bg: #4A1C15;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, .35);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, .45);
+  --shadow-window: 0 20px 60px rgba(0, 0, 0, .55);
+  --focus-ring: 0 0 0 2px #7FA3CC, 0 0 0 5px rgba(127, 163, 204, .35);
+  --scroll-thumb: #3B4D62; --scroll-thumb-hover: #5A6B7C;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg-app: #0F1A26; --bg-surface: #172433; --bg-subtle: #1E2D3E; --bg-raised: #24364A;
+  --text: #EEF3F7; --text-2: #C2CED9; --text-muted: #8FA0B2; --border: #2A3B4F;
+  --primary: #7FA3CC; --primary-hover: #9DBADB; --primary-soft: #1D3A63; --on-primary: #0F1A26;
+  --accent: #F07A6C; --accent-hover: #F3A79E; --on-accent: #0F1A26;
+  --info-fg: #C7DAEE; --info-bg: #1D3A63;
+  --success-fg: #8ED4B5; --success-bg: #133D2F;
+  --warning-fg: #F2C46D; --warning-bg: #3D2D0A;
+  --danger-fg: #F3A79E; --danger-bg: #4A1C15;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, .35);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, .45);
+  --shadow-window: 0 20px 60px rgba(0, 0, 0, .55);
+  --focus-ring: 0 0 0 2px #7FA3CC, 0 0 0 5px rgba(127, 163, 204, .35);
+  --scroll-thumb: #3B4D62; --scroll-thumb-hover: #5A6B7C;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font: 400 var(--fs-body)/1.5 var(--font-sans);
+  color: var(--text); background: var(--bg-app);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: "tnum" 1;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden; /* aucun défilement horizontal sur mobile */
+}
+.mono { font-family: var(--font-mono); }
+a { color: var(--primary); } a:hover { color: var(--accent); }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* En-tête de l'application (remplace la barre de titre Electron) */
+.app-header {
+  position: sticky; top: 0; z-index: 10;
+  min-height: var(--header-h); display: flex; align-items: center; gap: var(--sp-3);
+  padding: env(safe-area-inset-top) max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+  background: var(--bg-app); border-bottom: 1px solid var(--border);
+}
+/* Conteneur de page centré, marges responsives + zones sûres (encoche iPhone) */
+.container {
+  width: 100%; max-width: var(--content-max); margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+/* Cibles tactiles */
+button, [role="button"], a.btn { min-height: var(--touch-min); }
+img, svg, iframe { max-width: 100%; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Scrollbars (Chromium/Safari + Firefox) */
+html { scrollbar-color: var(--scroll-thumb) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: var(--r-pill); border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); background-clip: padding-box; }
+
+/* Icônes SVG (Material Symbols Rounded, exportées en SVG) */
+.icon { width: var(--icon-ui); height: var(--icon-ui); fill: currentColor; flex: none; }

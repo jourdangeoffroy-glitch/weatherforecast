@@ -1,7 +1,7 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.8 — cadrage finalisé (aucun code produit)
-> **Dernière mise à jour** : 2026-11-12
+> **Statut** : v1.0-dev — V1 développée sur la branche `claude/affectionate-ritchie-f5g02p` (non mergée, non déployée)
+> **Dernière mise à jour** : 2026-11-12 (V1)
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
 ## 1. Objectif
@@ -10,14 +10,14 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 ## 2. Périmètre fonctionnel (MVP)
 | # | Fonction | Statut |
 |---|----------|--------|
-| F1 | Accueil : météo du jour pour tous les lieux (T° min/max, icône, pluie, vent) | Validé |
-| F2 | 2 catégories : **Villes** / **Montagne** — attribution auto (altitude > 1 200 m), modifiable manuellement | Validé |
-| F3 | Badge du **modèle** utilisé, par lieu et par jour | Validé |
-| F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Validé |
-| F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (ex. monde : `meteofrance.com/meteo-monde/toronto/6167865`) | Validé |
-| F6 | Détail Montagne : widget Snow-Forecast. Stations **françaises uniquement**, listées dans `data/stations.json`, enrichie à la main au fil des ajouts | Validé |
-| F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes, Arc 1800 | Validé |
-| F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Validé |
+| F1 | Accueil : météo du jour pour tous les lieux (T° min/max, icône, pluie, vent) | Développé |
+| F2 | 2 catégories : **Villes** / **Montagne** — attribution auto (altitude > 1 200 m), modifiable manuellement | Développé |
+| F3 | Badge du **modèle** utilisé, par lieu et par jour | Développé |
+| F4 | Détail : J0 heure par heure ; J+1… par demi-journée | Développé |
+| F5 | Détail : lien vers la page de la ville sur **meteofrance.com** (ex. monde : `meteofrance.com/meteo-monde/toronto/6167865`) | Développé |
+| F6 | Détail Montagne : widget Snow-Forecast. Stations **françaises uniquement**, listées dans `data/stations.json`, enrichie à la main au fil des ajouts | Développé |
+| F7 | Ajout / suppression de lieux. Liste initiale : Lyon, Winnipeg, Rovaniemi, Lappeenranta, Le Grand-Bornand, Les Deux Alpes, Arc 1800 | Développé |
+| F8 | Export / import JSON des lieux (pas de synchro entre appareils en V1 ; Turso envisagé plus tard) | Développé |
 
 **Hors périmètre** : comptes utilisateurs, alertes, usage commercial.
 
@@ -57,7 +57,15 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | Ajout d'une station hors liste | Pas de widget | Ajout manuel dans `data/stations.json` (slug vérifié sur snow-forecast.com) |
 | CGU Snow-Forecast (licence perso non commerciale, pas de reproduction du site) | Republier leur base serait non conforme | Résolu : on ne stocke que les slugs des stations utilisées |
 | Le Grand-Bornand (village ≈ 950 m) classé « Ville » par la règle 1 200 m | Mauvaise catégorie | Forcé « Montagne » dans la liste initiale |
-| Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | À trancher (cf. SPECS §9) |
+| Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | Export / import JSON (F8) ; synchro plus tard |
+| Lien Météo-France Winnipeg (`/meteo-monde/winnipeg/6183235`) renvoie 404 | Lien mort pour ce lieu | Ouvert : identifiant Météo-France à trouver |
+| Quota Open-Meteo par IP (10 000/j) | Partagé si IP commune (constaté sur le proxy cloud de dev, pas chez l'utilisateur) | Cache 30 min, 1 appel/lieu |
+| GitHub Pages sans en-têtes HTTP | CSP via `<meta>` : `frame-ancestors` impossible (clickjacking non bloqué) | Accepté (pas d'action sensible) |
+
+## 5 bis. État du développement (2026-11-12)
+- Code V1 : `src/` (React + TS + Vite), 15 tests unitaires (`npm test`), build OK, `npm audit` : 0 vulnérabilité.
+- Déploiement : workflow `.github/workflows/deploy.yml` (sur push `main`). À activer : Settings › Pages › Source = GitHub Actions.
+- Non fait : merge, mise en production, `security-audit` complet (requis avant merge).
 
 ## 6. Gouvernance
 - Mise à jour obligatoire de `CADRAGE.md` + `SPECS.md` à chaque changement.

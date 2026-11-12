@@ -2,8 +2,38 @@
   "_source": "Coordonnées/altitude/id : Open-Meteo Geocoding (GeoNames, CC BY 4.0). Slug : URL publique snow-forecast.com/resorts/{slug}. Liste construite à la main, au fil des ajouts.",
   "_maj": "2026-11-12",
   "stations": [
-    { "nom": "Le Grand-Bornand", "geonamesId": 3004041, "lat": 45.94211, "lon": 6.43077, "altitude": 919, "departement": "Haute-Savoie", "snowForecastSlug": "Le-Grand-Bornand", "categorieForcee": "montagne" },
-    { "nom": "Les Deux Alpes", "geonamesId": 6354942, "lat": 45.0116, "lon": 6.12548, "altitude": 1650, "departement": "Isère", "snowForecastSlug": "Les-Deux-Alpes" },
-    { "nom": "Arc 1800", "geonamesId": 7580019, "lat": 45.57755, "lon": 6.78165, "altitude": 1800, "departement": "Savoie", "snowForecastSlug": "Les-Arcs" }
-  ]
+    {
+      "nom": "Le Grand-Bornand",
+      "geonamesId": 3004041,
+      "lat": 45.94211,
+      "lon": 6.43077,
+      "altitude": 919,
+      "departement": "Haute-Savoie",
+      "snowForecastSlug": "Le-Grand-Bornand",
+      "categorieForcee": "montagne",
+      "codePostal": "74450"
+    },
+    {
+      "nom": "Les Deux Alpes",
+      "geonamesId": 6354942,
+      "lat": 45.0116,
+      "lon": 6.12548,
+      "altitude": 1650,
+      "departement": "Isère",
+      "snowForecastSlug": "Les-Deux-Alpes",
+      "codePostal": "38520"
+    },
+    {
+      "nom": "Arc 1800",
+      "geonamesId": 7580019,
+      "lat": 45.57755,
+      "lon": 6.78165,
+      "altitude": 1800,
+      "departement": "Savoie",
+      "snowForecastSlug": "Les-Arcs",
+      "codePostal": "73700",
+      "meteoFranceSlug": "bourg-saint-maurice"
+    }
+  ],
+  "_meteofrance": "codePostal/meteoFranceSlug : URL meteofrance.com/previsions-meteo-france/{slug}/{codePostal} vérifiée (HTTP 200) le 2026-11-12. Arc 1800 renvoie vers la commune Bourg-Saint-Maurice."
 }
