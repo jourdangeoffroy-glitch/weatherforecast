@@ -65,7 +65,8 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 ## 5 bis. État du développement (2026-11-12)
 - Code V1 : `src/` (React + TS + Vite), 15 tests unitaires (`npm test`), build OK, `npm audit` : 0 vulnérabilité.
 - Déploiement : workflow `.github/workflows/deploy.yml` (sur push `main`). À activer : Settings › Pages › Source = GitHub Actions.
-- Non fait : merge, mise en production, `security-audit` complet (requis avant merge).
+- `security-audit` (profil quick, commit `3b3f9af`, 2026-11-12) : 0 vulnérabilité confirmée, 0 piste à valider, 8 points de durcissement ; serveur de dev Vite non couvert (vite 5.4.11 antérieur à des correctifs du serveur de dev).
+- Non fait : merge, mise en production.
 
 ## 6. Gouvernance
 - Mise à jour obligatoire de `CADRAGE.md` + `SPECS.md` à chaque changement.
