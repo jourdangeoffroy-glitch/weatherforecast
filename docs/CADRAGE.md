@@ -1,6 +1,6 @@
 # Document de cadrage — WeatherForecast
 
-> **Statut** : v0.6 — cadrage finalisé (sous réserve CGU Snow-Forecast) (aucun code produit)
+> **Statut** : v0.7 — cadrage finalisé (1 décision en attente : liste Snow-Forecast) (aucun code produit)
 > **Dernière mise à jour** : 2026-11-12
 > **Règle** : ce document reflète en continu l'état réel de l'application. Toute modification de l'app ⇒ mise à jour de ce fichier et de `SPECS.md`.
 
@@ -55,7 +55,7 @@ Application **web responsive (mobile → desktop)** d'aperçu rapide des prévis
 | Seuil 1 200 m | Ex. Chamonix (≈ 1 035 m) classé « Ville » | Catégorie modifiable à la main par lieu |
 | Chiffres app ≠ meteofrance.com (le site publie une prévision retravaillée, pas le modèle brut) | Écarts de quelques °C possibles | Libellé « Voir sur Météo-France » |
 | Vérification Snow-Forecast depuis le navigateur bloquée (CORS, pas d'API publique) | Ajout montagne non vérifiable côté client | Liste de stations générée depuis le sitemap Snow-Forecast (cf. SPECS §4) |
-| CGU Snow-Forecast : collecte automatisée non vérifiée (pages `/pages/terms` et `/pages/acceptable_use` non lues) | **Bloquant pour F6-vérif** si interdit | Lire les CGU + `robots.txt` avant d'implémenter ; repli : liste manuelle |
+| CGU Snow-Forecast lues le 2026-11-12 : `robots.txt` autorise le sitemap et `/resorts/*/6day` ; CGU : licence « personnelle et non commerciale », interdiction de « reproduire, dupliquer, copier » le site hors de ce cadre ; droits sur les bases de données revendiqués | Publier la liste complète (3 224 stations) dans un repo **public** = redistribution, zone grise | Décision PO en attente (cf. SPECS §9) |
 | Le Grand-Bornand (village ≈ 950 m) classé « Ville » par la règle 1 200 m | Mauvaise catégorie | Forcé « Montagne » dans la liste initiale |
 | Lieux stockés en `localStorage` | Listes **différentes entre téléphone et ordinateur**, perte si cache vidé | À trancher (cf. SPECS §9) |
 
