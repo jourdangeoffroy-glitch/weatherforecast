@@ -6,6 +6,7 @@ import { STATIONS } from '../lib/stations';
 import { Icon } from './Icon';
 
 type Props = { ouvert: boolean; existants: Lieu[]; onAjout: (l: Lieu) => void; onFermer: () => void };
+// onAjout valide et plafonne (App.ajouterLieu) : versLieu produit une donnée tierce non fiable.
 
 export function Ajout({ ouvert, existants, onAjout, onFermer }: Props) {
   const ref = useRef<HTMLDialogElement>(null);

@@ -64,13 +64,14 @@ export function validerLieu(v: unknown): Lieu | null {
   return l;
 }
 
-export function validerListe(v: unknown): Lieu[] {
+export function validerListe(v: unknown, opts: { tronquer?: boolean } = {}): Lieu[] {
   const arr = Array.isArray(v) ? v : v && typeof v === 'object' ? (v as { lieux?: unknown }).lieux : null;
   if (!Array.isArray(arr)) throw new Error('Format invalide : tableau « lieux » attendu.');
-  if (arr.length > MAX_LIEUX) throw new Error(`Trop de lieux (max ${MAX_LIEUX}).`);
+  if (arr.length > MAX_LIEUX && !opts.tronquer) throw new Error(`Trop de lieux (max ${MAX_LIEUX}).`);
   const ok: Lieu[] = [];
   for (const x of arr) {
     const l = validerLieu(x);
+    if (ok.length >= MAX_LIEUX) break;
     if (l && !ok.some((y) => y.id === l.id)) ok.push(l);
   }
   if (arr.length && !ok.length) throw new Error('Aucun lieu valide dans le fichier.');
@@ -80,7 +81,7 @@ export function validerListe(v: unknown): Lieu[] {
 export function charger(): Lieu[] {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw !== null) return validerListe(JSON.parse(raw));
+    if (raw !== null) return validerListe(JSON.parse(raw), { tronquer: true });
   } catch {
     /* stockage indisponible ou corrompu : liste initiale */
   }

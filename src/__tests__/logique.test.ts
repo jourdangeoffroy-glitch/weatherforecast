@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { demiJournees, forecastUrl, grouperParJour, heureLocale, parseHourly } from '../lib/forecast';
 import { choisirCodePostal, meteoFranceUrl, slugifier } from '../lib/meteofrance';
-import { categorieAuto, LISTE_INITIALE, validerListe } from '../lib/lieux';
+import { categorieAuto, LISTE_INITIALE, validerLieu, validerListe } from '../lib/lieux';
 import { snowForecastFeedUrl } from '../lib/stations';
 import { codeDominant } from '../lib/weathercode';
 
@@ -121,5 +121,13 @@ describe('lieux', () => {
     expect(sale[0].meteoFranceSlug).toBeUndefined();
     expect(() => validerListe({ foo: 1 })).toThrow();
     expect(() => validerListe(Array(51).fill(LISTE_INITIALE[0]))).toThrow();
+  });
+  it('chargement : > 50 lieux tronqués, pas de rejet (H2)', () => {
+    const big = Array.from({ length: 60 }, (_, i) => ({ ...LISTE_INITIALE[0], id: `gn-${i + 1}`, geonamesId: i + 1 }));
+    expect(validerListe(big, { tronquer: true })).toHaveLength(50);
+  });
+  it('géocodage malformé rejeté par validerLieu (H2)', () => {
+    expect(validerLieu({ ...LISTE_INITIALE[0], lon: '6' })).toBeNull();
+    expect(validerLieu({ ...LISTE_INITIALE[0], nom: 42 })).toBeNull();
   });
 });

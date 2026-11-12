@@ -75,6 +75,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 - Responsive **mobile d'abord** : 1 colonne < 600 px, 2 colonnes 600–1023 px, 3–4 colonnes ≥ 1 024 px (tokens Névé v0.3).
 - Hébergement : GitHub Pages via GitHub Actions (build Vite, `base: '/weatherforecast/'`).
 - Rafraîchissement : au chargement + bouton « Actualiser » (ignore le cache). Cache `localStorage` 30 min par lieu.
+- Ajout : validé par `validerLieu`, refusé au-delà de 50 lieux (message). Chargement localStorage : liste tronquée à 50 au lieu d'être rejetée.
 - Export / import : fichier JSON `{ app, version, exporteLe, lieux }`. Import : max 100 Ko, 50 lieux, validation champ par champ, remplace la liste après confirmation.
 
 ## 7. Design system (Névé)
@@ -105,6 +106,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
 | 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
+| 2026-11-12 | 1.0-dev.3 | H1/H2/H6 appliqués, ajout limité à 50 lieux, montée vite 8.3.5 / vitest 5.0.5, versions exactes épinglées |
 | 2026-11-12 | 1.0-dev.2 | security-audit quick : 0 finding, 8 durcissements listés (non appliqués) |
 | 2026-11-12 | 1.0-dev.1 | Demi-journées 06–12 / 12–18 validées, lien Météo-France Winnipeg masqué |
 | 2026-11-12 | 1.0-dev | Développement V1 (F1–F8), URL Météo-France vérifiées, CSP, tests, workflow Pages |

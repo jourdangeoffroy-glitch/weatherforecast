@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Categorie, Lieu, Prevision } from './types';
-import { charger, exporter, sauver, validerListe } from './lib/lieux';
+import { charger, exporter, MAX_LIEUX, sauver, validerLieu, validerListe } from './lib/lieux';
 import { getForecast } from './lib/forecast';
 import { Accueil } from './components/Accueil';
 import { Detail } from './components/Detail';
@@ -11,7 +11,12 @@ export type Etat = { prevision?: Prevision; erreur?: string };
 
 const routeId = () => {
   const m = /^#\/lieu\/([^/]+)$/.exec(location.hash);
-  return m ? decodeURIComponent(m[1]) : null;
+  if (!m) return null;
+  try {
+    return decodeURIComponent(m[1]);
+  } catch {
+    return null; // séquence % malformée (ex. #/lieu/%E0) : on ignore au lieu de planter le rendu
+  }
 };
 
 export default function App() {
@@ -37,6 +42,13 @@ export default function App() {
     }
   }, []);
   useEffect(() => charge(lieux.filter((l) => !etats[l.id])), [lieux]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const ajouterLieu = (brut: Lieu) => {
+    const l = validerLieu(brut);
+    if (!l) return setInfo('Lieu refusé : données de géocodage invalides.');
+    if (lieux.length >= MAX_LIEUX) return setInfo(`Limite de ${MAX_LIEUX} lieux atteinte.`);
+    setLieux((ls) => (ls.some((x) => x.id === l.id) ? ls : [...ls, l]));
+  };
 
   const maj = (lid: string, patch: Partial<Lieu>) => setLieux((ls) => ls.map((l) => (l.id === lid ? { ...l, ...patch } : l)));
 
@@ -101,7 +113,7 @@ export default function App() {
         modèles Météo-France AROME / ARPEGE. Widgets montagne :{' '}
         <a href="https://www.snow-forecast.com/" target="_blank" rel="noopener noreferrer">snow-forecast.com</a>.
       </footer>
-      <Ajout ouvert={ajout} existants={lieux} onAjout={(l) => setLieux((ls) => [...ls, l])} onFermer={() => setAjout(false)} />
+      <Ajout ouvert={ajout} existants={lieux} onAjout={ajouterLieu} onFermer={() => setAjout(false)} />
     </>
   );
 }
