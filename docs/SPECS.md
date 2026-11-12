@@ -83,7 +83,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 ## 9. Questions ouvertes
 1. Table « zone → modèle le plus fin » (dépend de la liste initiale).
 2. Liste initiale des lieux.
-3. Liste Snow-Forecast : publier les 3 224 slugs dans l'app, ou seulement les stations utilisées ?
+3. Liste des stations : **France uniquement** (décision PO). Jeu data.gouv.fr « Cartographie des stations de ski de la Métropole » écarté : il couvre la **Métropole Nice Côte d'Azur** seulement (données 2015, source non joignable). Source alternative à valider.
 4. Formats d'URL meteofrance.com (France) et limites des domaines des modèles.
 - Tranché : stockage `localStorage` + export/import JSON (V1) ; synchro type Turso plus tard (nécessitera une authentification car l'URL est publique).
 
@@ -96,4 +96,5 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
 | 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
+| 2026-11-12 | 0.7.1 | Stations limitées à la France ; jeu data.gouv.fr Nice Côte d'Azur écarté |
 | 2026-11-12 | 0.7 | CGU + sitemap Snow-Forecast vérifiés, Rovaniemi = Ville, environnement réseau « weatherforecast » créé |
