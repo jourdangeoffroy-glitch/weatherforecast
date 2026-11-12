@@ -106,6 +106,7 @@ Attribution : « Données Open-Meteo (CC BY 4.0) — modèle X ». Cache local (
 | 2026-11-12 | 0.4 | DS adapté au web, responsive, repo public + GitHub Pages, lien meteofrance.com pour tous, catégorie modifiable |
 | 2026-11-12 | 0.5 | V1 100 % Météo-France (4 j), liste initiale, export/import, vérification Snow-Forecast |
 | 2026-11-12 | 0.6 | Liste des stations générée depuis le sitemap Snow-Forecast (sous réserve CGU) |
+| 2026-11-12 | 1.0-rc | Poussé sur `main` ; déploiement Pages en attente d'activation ; archive audit run-1 + prompt de re-audit |
 | 2026-11-12 | 1.0-dev.3 | H1/H2/H6 appliqués, ajout limité à 50 lieux, montée vite 8.3.5 / vitest 5.0.5, versions exactes épinglées |
 | 2026-11-12 | 1.0-dev.2 | security-audit quick : 0 finding, 8 durcissements listés (non appliqués) |
 | 2026-11-12 | 1.0-dev.1 | Demi-journées 06–12 / 12–18 validées, lien Météo-France Winnipeg masqué |
